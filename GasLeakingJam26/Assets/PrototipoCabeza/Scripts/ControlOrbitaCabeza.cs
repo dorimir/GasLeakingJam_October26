@@ -1,100 +1,100 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
-using Unity.Cinemachine;
 
-/// Rota la cámara orbital alrededor de la cabeza con clic derecho y hace zoom con la rueda.
-/// RestaurarVista() lleva la cámara a la nuca (vista trasera).
-[RequireComponent(typeof(CinemachineOrbitalFollow))]
+/// Cámara orbital propia (va en la Main Camera): rota alrededor del objetivo con clic derecho,
+/// zoom limitado con la rueda y RestaurarVista() la lleva a la nuca.
+[DefaultExecutionOrder(-100)]
 public class ControlOrbitaCabeza : MonoBehaviour
 {
+    public Transform objetivo;
+
     [Header("Rotación (clic derecho)")]
     public float sensibilidadHorizontal = 0.3f;   // grados por píxel
     public float sensibilidadVertical = 0.25f;
     public bool invertirHorizontal = false;
     public bool invertirVertical = false;
+    public float anguloVerticalMin = -15f;
+    public float anguloVerticalMax = 80f;
 
     [Header("Zoom (rueda)")]
-    public float sensibilidadZoom = 0.001f;
+    public float distancia = 4.2f;
+    public float distanciaMin = 2.5f;
+    public float distanciaMax = 6.3f;
+    public float sensibilidadZoom = 0.004f;
+
+    [Header("Vista inicial")]
+    public float anguloHorizontalInicial = 180f;   // 180 = de frente, 0 = nuca
+    public float anguloVerticalInicial = 10f;
 
     [Header("Vista restaurada (nuca)")]
     public float anguloHorizontalNuca = 0f;
     public float anguloVerticalNuca = 25f;
-    public float zoomNuca = 1f;
+    public float distanciaNuca = 4.2f;
     public float duracionRestaurar = 0.6f;
 
-    CinemachineOrbitalFollow orbital;
+    float yaw, pitch;
     Coroutine animacion;
 
-    void Awake()
+    void Start()
     {
-        orbital = GetComponent<CinemachineOrbitalFollow>();
+        yaw = anguloHorizontalInicial;
+        pitch = anguloVerticalInicial;
+        Aplicar();
     }
 
-    void Update()
+    void LateUpdate()
     {
         var mouse = Mouse.current;
-        if (mouse == null) return;
-
-        if (mouse.rightButton.isPressed)
+        if (mouse != null)
         {
-            Vector2 d = mouse.delta.ReadValue();
-            if (d.sqrMagnitude > 0f)
+            if (mouse.rightButton.isPressed)
+            {
+                Vector2 d = mouse.delta.ReadValue();
+                if (d.sqrMagnitude > 0f)
+                {
+                    DetenerAnimacion();
+                    yaw += (invertirHorizontal ? -d.x : d.x) * sensibilidadHorizontal;
+                    pitch += (invertirVertical ? d.y : -d.y) * sensibilidadVertical;
+                    pitch = Mathf.Clamp(pitch, anguloVerticalMin, anguloVerticalMax);
+                    yaw = Mathf.Repeat(yaw + 180f, 360f) - 180f;
+                }
+            }
+            float scroll = mouse.scroll.ReadValue().y;
+            if (scroll != 0f)
             {
                 DetenerAnimacion();
-                float dx = (invertirHorizontal ? -d.x : d.x) * sensibilidadHorizontal;
-                float dy = (invertirVertical ? d.y : -d.y) * sensibilidadVertical;
-
-                var h = orbital.HorizontalAxis;
-                h.Value = Envolver(h.Value + dx, h.Range);
-                orbital.HorizontalAxis = h;
-
-                var v = orbital.VerticalAxis;
-                v.Value = Mathf.Clamp(v.Value + dy, v.Range.x, v.Range.y);
-                orbital.VerticalAxis = v;
+                distancia = Mathf.Clamp(distancia - scroll * sensibilidadZoom, distanciaMin, distanciaMax);
             }
         }
+        Aplicar();
+    }
 
-        float scroll = mouse.scroll.ReadValue().y;
-        if (scroll != 0f)
-        {
-            DetenerAnimacion();
-            var r = orbital.RadialAxis;
-            r.Value = Mathf.Clamp(r.Value - scroll * sensibilidadZoom, r.Range.x, r.Range.y);
-            orbital.RadialAxis = r;
-        }
+    void Aplicar()
+    {
+        if (objetivo == null) return;
+        Quaternion rot = Quaternion.Euler(pitch, yaw, 0f);
+        transform.SetPositionAndRotation(objetivo.position + rot * new Vector3(0f, 0f, -distancia), rot);
     }
 
     /// Llamado por el botón "Restaurar vista".
     public void RestaurarVista()
     {
         DetenerAnimacion();
-        animacion = StartCoroutine(AnimarHacia(anguloHorizontalNuca, anguloVerticalNuca, zoomNuca));
+        animacion = StartCoroutine(AnimarHacia(anguloHorizontalNuca, anguloVerticalNuca, distanciaNuca));
     }
 
-    IEnumerator AnimarHacia(float hFin, float vFin, float rFin)
+    IEnumerator AnimarHacia(float yawFin, float pitchFin, float distFin)
     {
-        float hIni = orbital.HorizontalAxis.Value;
-        float vIni = orbital.VerticalAxis.Value;
-        float rIni = orbital.RadialAxis.Value;
+        float yawIni = yaw, pitchIni = pitch, distIni = distancia;
         float t = 0f;
         while (t < 1f)
         {
             t += Time.unscaledDeltaTime / Mathf.Max(0.01f, duracionRestaurar);
             float k = Mathf.SmoothStep(0f, 1f, t);
-
-            var h = orbital.HorizontalAxis;
-            h.Value = Envolver(Mathf.LerpAngle(hIni, hFin, k), h.Range);
-            orbital.HorizontalAxis = h;
-
-            var v = orbital.VerticalAxis;
-            v.Value = Mathf.Lerp(vIni, vFin, k);
-            orbital.VerticalAxis = v;
-
-            var r = orbital.RadialAxis;
-            r.Value = Mathf.Lerp(rIni, rFin, k);
-            orbital.RadialAxis = r;
-
+            yaw = Mathf.LerpAngle(yawIni, yawFin, k);
+            pitch = Mathf.Lerp(pitchIni, pitchFin, k);
+            distancia = Mathf.Lerp(distIni, distFin, k);
             yield return null;
         }
         animacion = null;
@@ -103,11 +103,5 @@ public class ControlOrbitaCabeza : MonoBehaviour
     void DetenerAnimacion()
     {
         if (animacion != null) { StopCoroutine(animacion); animacion = null; }
-    }
-
-    static float Envolver(float valor, Vector2 rango)
-    {
-        float ancho = rango.y - rango.x;
-        return Mathf.Repeat(valor - rango.x, ancho) + rango.x;
     }
 }

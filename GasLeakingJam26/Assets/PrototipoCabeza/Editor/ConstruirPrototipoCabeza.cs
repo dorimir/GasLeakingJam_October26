@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.InputSystem.UI;
 using UnityEngine.UI;
-using Unity.Cinemachine;
 
 /// Menú: GasLeaking > Construir prototipo cabeza
 /// Genera la escena Assets/Scenes/PrototipoCabeza.unity con busto, cámara orbital y botón de restaurar vista.
@@ -60,42 +59,14 @@ public static class ConstruirPrototipoCabeza
         foco.transform.SetParent(busto.transform);
         foco.transform.localPosition = new Vector3(0f, 1.15f, 0f);
 
-        // ---- Cámara ----
+        // ---- Cámara (orbital propia, sin Cinemachine) ----
         var camPrincipal = Camera.main;
         camPrincipal.clearFlags = CameraClearFlags.SolidColor;
         camPrincipal.orthographic = false;
+        camPrincipal.fieldOfView = 35f;
         camPrincipal.backgroundColor = new Color(0.16f, 0.17f, 0.2f);
-        camPrincipal.gameObject.AddComponent<CinemachineBrain>();
-
-        var camGO = new GameObject("CamaraOrbital");
-        var cm = camGO.AddComponent<CinemachineCamera>();
-        cm.Target.TrackingTarget = foco.transform;
-        cm.Lens.FieldOfView = 35f;
-        cm.Lens.ModeOverride = LensSettings.OverrideModes.Perspective;
-
-        var orbital = camGO.AddComponent<CinemachineOrbitalFollow>();
-        orbital.OrbitStyle = CinemachineOrbitalFollow.OrbitStyles.Sphere;
-        orbital.Radius = 4.2f;   // plano medio
-        orbital.TrackerSettings.BindingMode = Unity.Cinemachine.TargetTracking.BindingMode.WorldSpace;
-        orbital.TrackerSettings.PositionDamping = Vector3.zero;
-
-        orbital.HorizontalAxis.Range = new Vector2(-180f, 180f);
-        orbital.HorizontalAxis.Wrap = true;
-        orbital.HorizontalAxis.Value = 180f;      // empieza de frente
-        orbital.HorizontalAxis.Center = 180f;
-
-        orbital.VerticalAxis.Range = new Vector2(-15f, 80f);
-        orbital.VerticalAxis.Value = 10f;
-        orbital.VerticalAxis.Center = 10f;
-
-        orbital.RadialAxis.Range = new Vector2(0.6f, 1.5f);   // límites de zoom
-        orbital.RadialAxis.Value = 1f;
-        orbital.RadialAxis.Center = 1f;
-
-        var composer = camGO.AddComponent<CinemachineRotationComposer>();
-        composer.Damping = Vector2.zero;
-
-        var control = camGO.AddComponent<ControlOrbitaCabeza>();
+        var control = camPrincipal.gameObject.AddComponent<ControlOrbitaCabeza>();
+        control.objetivo = foco.transform;
 
         // ---- UI ----
         var canvasGO = new GameObject("Canvas", typeof(Canvas), typeof(CanvasScaler), typeof(GraphicRaycaster));
