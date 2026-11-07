@@ -270,6 +270,7 @@ GameObject:
   - component: {fileID: 418719591}
   - component: {fileID: 418719590}
   - component: {fileID: 418719589}
+  - component: {fileID: 418719592}
   m_Layer: 5
   m_Name: Jugar_b
   m_TagString: Untagged
@@ -391,6 +392,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 418719587}
   m_CullTransparentMesh: 1
+--- !u!114 &418719592
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418719587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: 612f0583b42993c458987649488d1b9b, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1 &637397942
 GameObject:
   m_ObjectHideFlags: 0
@@ -1198,6 +1216,7 @@ GameObject:
   - component: {fileID: 1347347428}
   - component: {fileID: 1347347427}
   - component: {fileID: 1347347426}
+  - component: {fileID: 1347347429}
   m_Layer: 5
   m_Name: Creditos_b
   m_TagString: Untagged
@@ -1319,6 +1338,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1347347424}
   m_CullTransparentMesh: 1
+--- !u!114 &1347347429
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347347424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1 &1351632456
 GameObject:
   m_ObjectHideFlags: 0
@@ -1739,6 +1775,7 @@ GameObject:
   - component: {fileID: 2073996136}
   - component: {fileID: 2073996135}
   - component: {fileID: 2073996134}
+  - component: {fileID: 2073996137}
   m_Layer: 5
   m_Name: Salir_b
   m_TagString: Untagged
@@ -1860,6 +1897,23 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2073996132}
   m_CullTransparentMesh: 1
+--- !u!114 &2073996137
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073996132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: 2b53df80e1a950545bb1de931a1c97c9, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
