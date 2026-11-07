@@ -24,6 +24,8 @@ public class GestorMechones : MonoBehaviour
     public MeshFilter mallaCabeza;
     [Tooltip("Índice de la submalla (material) que es la zona calva")]
     public int submallaCalva = 1;
+    [Tooltip("Puntos de muestra sobre la zona calva para calcular el % (más = más preciso)")]
+    public int muestrasZonaCalva = 800;
 
     [Header("Arrastre")]
     public Camera camara;
@@ -171,20 +173,36 @@ public class GestorMechones : MonoBehaviour
 
     void PrepararMuestras()
     {
-        var puntos = new HashSet<Vector3>();
+        // Puntos repartidos por área sobre los triángulos de la zona calva (sirve también para mallas low-poly).
+        var lista = new List<Vector3>();
         var malla = mallaCabeza ? mallaCabeza.sharedMesh : null;
         if (malla != null && submallaCalva < malla.subMeshCount)
         {
             var v = malla.vertices;
             var t = malla.GetTriangles(submallaCalva);
-            for (int i = 0; i < t.Length; i += 3)
+            var tr = mallaCabeza.transform;
+            int nTri = t.Length / 3;
+            var areas = new float[nTri];
+            float total = 0f;
+            for (int i = 0; i < nTri; i++)
             {
-                puntos.Add(v[t[i]]); puntos.Add(v[t[i + 1]]); puntos.Add(v[t[i + 2]]);
-                puntos.Add((v[t[i]] + v[t[i + 1]] + v[t[i + 2]]) / 3f);
+                Vector3 a = tr.TransformPoint(v[t[i * 3]]), b = tr.TransformPoint(v[t[i * 3 + 1]]), c = tr.TransformPoint(v[t[i * 3 + 2]]);
+                areas[i] = Vector3.Cross(b - a, c - a).magnitude * 0.5f;
+                total += areas[i];
+            }
+            var rnd = new System.Random(12345);
+            for (int i = 0; i < nTri && total > 0f; i++)
+            {
+                int n = Mathf.Max(1, Mathf.RoundToInt(muestrasZonaCalva * areas[i] / total));
+                Vector3 a = v[t[i * 3]], b = v[t[i * 3 + 1]], c = v[t[i * 3 + 2]];
+                for (int k = 0; k < n; k++)
+                {
+                    float r1 = Mathf.Sqrt((float)rnd.NextDouble()), r2 = (float)rnd.NextDouble();
+                    lista.Add((1f - r1) * a + r1 * (1f - r2) * b + r1 * r2 * c);
+                }
             }
         }
-        muestrasLocales = new Vector3[puntos.Count];
-        puntos.CopyTo(muestrasLocales);
+        muestrasLocales = lista.ToArray();
         if (muestrasLocales.Length == 0)
             Debug.LogWarning("[GestorMechones] No se encontró la zona calva (revisa mallaCabeza y submallaCalva).");
     }
