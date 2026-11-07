@@ -4,9 +4,11 @@ using UnityEngine.EventSystems;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 
-/// Gestiona los mechones: bandeja 3D en un lateral de la pantalla, panel lateral de UI desde el que
-/// también se arrastran, arrastre con clic izquierdo hasta la cabeza y cálculo del % de calvicie.
-[DefaultExecutionOrder(100)]   // después de la cámara, para que la bandeja no tiemble al orbitar
+/// Gestiona los mechones: se sacan arrastrando desde el contador (panel de UI), se pegan en la
+/// cabeza con clic izquierdo y se pueden recolocar. Si se sueltan fuera de la cabeza vuelven al
+/// contador. Calcula el % de calvicie.
+/// Los mechones se crean al sacarlos (no hay N mechones en la escena desde el principio).
+[DefaultExecutionOrder(100)]
 public class GestorMechones : MonoBehaviour
 {
     [Header("Mechones")]
@@ -23,26 +25,23 @@ public class GestorMechones : MonoBehaviour
     [Tooltip("Índice de la submalla (material) que es la zona calva")]
     public int submallaCalva = 1;
 
-    [Header("Bandeja 3D (lateral de la pantalla)")]
+    [Header("Arrastre")]
     public Camera camara;
-    public bool mostrarBandeja3D = true;
-    [Tooltip("true = derecha, false = izquierda")]
-    public bool bandejaDerecha = true;
-    public float distanciaBandeja = 2.5f;
-    [Range(0f, 0.5f)] public float margenBandeja = 0.1f;
-    public float velocidadBandeja = 12f;
-    [Tooltip("Tamaño de los mechones mientras esperan en la bandeja (1 = tamaño real)")]
-    public float escalaEnBandeja = 0.5f;
+    [Tooltip("Distancia a la cámara del mechón mientras lo arrastras fuera de la cabeza")]
+    public float distanciaArrastre = 2.5f;
 
     [Header("UI")]
     public Image rellenoBarra;
     public Text textoCalvicie;
     public Text textoMechones;
+    [Tooltip("Imagen del contador: se atenúa cuando no quedan mechones")]
+    public Graphic iconoContador;
     public Color colorCubierto = new Color(0.3f, 0.8f, 0.35f);
     public Color colorCalvo = new Color(0.9f, 0.3f, 0.25f);
 
     public float PorcentajeCalvicie { get; private set; } = 100f;
     public int MechonesDisponibles { get; private set; }
+    /// Mechones sacados (colocados en la cabeza o arrastrándose).
     public IReadOnlyList<Mechon> Mechones => mechones;
     /// Con el peine activo no se cogen mechones con el clic izquierdo.
     [HideInInspector] public bool modoPeine;
@@ -50,19 +49,13 @@ public class GestorMechones : MonoBehaviour
     readonly List<Mechon> mechones = new List<Mechon>();
     Vector3[] muestrasLocales = new Vector3[0];
     Mechon arrastrado;
-    bool primeraBandeja = true;
+    Color colorIcono = Color.white;
 
     void Start()
     {
         if (!camara) camara = Camera.main;
+        if (iconoContador) colorIcono = iconoContador.color;
         PrepararMuestras();
-        for (int i = 0; i < numeroMechones; i++)
-        {
-            var m = Instantiate(prefabMechon, transform);
-            m.name = "Mechon_" + (i + 1);
-            m.indiceBandeja = i;
-            mechones.Add(m);
-        }
         Recalcular();
     }
 
@@ -72,6 +65,7 @@ public class GestorMechones : MonoBehaviour
         if (mouse == null || camara == null) return;
         Ray rayo = EfectoPixelado.RayoDesdePantalla(camara, mouse.position.ReadValue());
 
+        // Recolocar un mechón ya pegado
         if (arrastrado == null && !modoPeine && mouse.leftButton.wasPressedThisFrame && !SobreUI())
         {
             var m = BuscarMechon(rayo);
@@ -86,27 +80,20 @@ public class GestorMechones : MonoBehaviour
         }
     }
 
-    void LateUpdate()
-    {
-        ColocarBandeja(primeraBandeja);
-        primeraBandeja = false;
-    }
-
-    /// Lo llama el panel lateral de UI al pulsar sobre él: coge un mechón libre y empieza a arrastrarlo.
+    /// Lo llama el contador (panel de UI) al pulsar sobre él: crea un mechón y empieza a arrastrarlo.
     public bool EmpezarArrastreDesdeUI()
     {
-        if (arrastrado != null || modoPeine) return false;
-        foreach (var m in mechones)
-        {
-            if (m.estado != Mechon.Estado.EnBandeja) continue;
-            m.gameObject.SetActive(true);
-            EmpezarArrastre(m);
-            var mouse = Mouse.current;
-            if (mouse != null) MoverArrastrado(EfectoPixelado.RayoDesdePantalla(camara, mouse.position.ReadValue()));
-            Recalcular();
-            return true;
-        }
-        return false;
+        if (arrastrado != null || modoPeine || prefabMechon == null) return false;
+        if (numeroMechones - mechones.Count <= 0) return false;
+
+        var m = Instantiate(prefabMechon, transform);
+        m.name = "Mechon_" + (mechones.Count + 1);
+        mechones.Add(m);
+        EmpezarArrastre(m);
+        var mouse = Mouse.current;
+        if (mouse != null) MoverArrastrado(EfectoPixelado.RayoDesdePantalla(camara, mouse.position.ReadValue()));
+        Recalcular();
+        return true;
     }
 
     // ---------- Arrastre ----------
@@ -120,8 +107,18 @@ public class GestorMechones : MonoBehaviour
 
     void Soltar()
     {
-        arrastrado.estado = arrastrado.sobreCabeza ? Mechon.Estado.Colocado : Mechon.Estado.EnBandeja;
+        var m = arrastrado;
         arrastrado = null;
+        if (m.sobreCabeza)
+        {
+            m.estado = Mechon.Estado.Colocado;
+        }
+        else
+        {
+            // Fuera de la cabeza: vuelve al contador
+            mechones.Remove(m);
+            Destroy(m.gameObject);
+        }
     }
 
     Mechon BuscarMechon(Ray rayo)
@@ -149,7 +146,7 @@ public class GestorMechones : MonoBehaviour
         else
         {
             arrastrado.sobreCabeza = false;
-            arrastrado.transform.SetPositionAndRotation(rayo.GetPoint(distanciaBandeja), RotacionHaciaCamara());
+            arrastrado.transform.SetPositionAndRotation(rayo.GetPoint(distanciaArrastre), RotacionHaciaCamara());
         }
     }
 
@@ -163,28 +160,6 @@ public class GestorMechones : MonoBehaviour
     Quaternion RotacionHaciaCamara()
     {
         return Quaternion.LookRotation(camara.transform.up, -camara.transform.forward);
-    }
-
-    void ColocarBandeja(bool inmediato)
-    {
-        if (camara == null) return;
-        int n = Mathf.Max(1, numeroMechones);
-        float k = inmediato ? 1f : 1f - Mathf.Exp(-velocidadBandeja * Time.deltaTime);
-        Quaternion rot = RotacionHaciaCamara();
-        float x = bandejaDerecha ? 1f - margenBandeja : margenBandeja;
-        foreach (var m in mechones)
-        {
-            if (m.estado != Mechon.Estado.EnBandeja) continue;
-            // Sin bandeja 3D, los mechones libres se esconden y salen desde el panel de UI.
-            if (m.gameObject.activeSelf != mostrarBandeja3D) m.gameObject.SetActive(mostrarBandeja3D);
-            if (!mostrarBandeja3D) continue;
-            float y = n == 1 ? 0.5f : Mathf.Lerp(0.85f, 0.15f, m.indiceBandeja / (float)(n - 1));
-            Vector3 objetivo = camara.ViewportToWorldPoint(new Vector3(x, y, distanciaBandeja));
-            Vector3 p = Vector3.Lerp(m.transform.position, objetivo, k);
-            if ((p - objetivo).sqrMagnitude < 0.0004f) p = objetivo;
-            m.transform.SetPositionAndRotation(p, Quaternion.Slerp(m.transform.rotation, rot, k));
-            m.transform.localScale = Vector3.Lerp(m.transform.localScale, m.escalaBase * escalaEnBandeja, k);
-        }
     }
 
     bool SobreUI()
@@ -234,11 +209,7 @@ public class GestorMechones : MonoBehaviour
         }
         int total = muestrasLocales.Length;
         PorcentajeCalvicie = total > 0 ? 100f * (1f - cubiertas / (float)total) : 0f;
-
-        int disponibles = 0;
-        foreach (var m in mechones) if (m.estado == Mechon.Estado.EnBandeja) disponibles++;
-        MechonesDisponibles = disponibles;
-
+        MechonesDisponibles = Mathf.Max(0, numeroMechones - mechones.Count);
         ActualizarUI();
     }
 
@@ -252,5 +223,11 @@ public class GestorMechones : MonoBehaviour
         }
         if (textoCalvicie) textoCalvicie.text = $"Calvicie: {Mathf.RoundToInt(PorcentajeCalvicie)}%";
         if (textoMechones) textoMechones.text = $"x {MechonesDisponibles}";
+        if (iconoContador)
+        {
+            var c = colorIcono;
+            if (MechonesDisponibles == 0) c.a *= 0.3f;
+            iconoContador.color = c;
+        }
     }
 }
