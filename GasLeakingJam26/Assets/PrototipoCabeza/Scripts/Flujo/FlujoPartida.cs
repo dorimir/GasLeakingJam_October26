@@ -18,6 +18,7 @@ public class FlujoPartida : MonoBehaviour
         ResultadoPartida.porcentajeCalvicie = gestor.PorcentajeCalvicie;
         ResultadoPartida.mechonesUsados = usados;
         ResultadoPartida.mechonesTotales = gestor.numeroMechones;
+        ResultadoPartida.escenaOrigen = gameObject.scene.name;
 
         Transicion.Ir(escenaResultados, () =>
         {

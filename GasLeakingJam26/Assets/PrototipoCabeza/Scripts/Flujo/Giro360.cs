@@ -1,6 +1,6 @@
 using UnityEngine;
 
-/// Cámara de Resultados: gira 360° sin parar alrededor del objetivo.
+/// Cámara de Resultados: la cámara queda fija y el GATO gira 360° sin parar.
 public class Giro360 : MonoBehaviour
 {
     [Tooltip("Si está vacío, busca un objeto con este nombre (el busto que viene del prototipo)")]
@@ -8,14 +8,15 @@ public class Giro360 : MonoBehaviour
     public string nombreObjetivo = "PuntoEnfoque";
 
     public float distancia = 4.2f;
-    [Tooltip("Ángulo vertical en grados (positivo = desde arriba)")]
+    [Tooltip("Ángulo vertical de la cámara en grados (positivo = desde arriba)")]
     public float anguloVertical = 15f;
-    [Tooltip("Grados por segundo")]
+    [Tooltip("Grados por segundo que gira el gato")]
     public float velocidad = 35f;
-    [Tooltip("180 = empieza de frente, 0 = desde la nuca")]
+    [Tooltip("Posición de la cámara: 180 = de frente, 0 = desde la nuca")]
     public float anguloInicial = 180f;
 
-    float yaw;
+    Transform gato;
+    Vector3 pivote;
 
     void Start()
     {
@@ -24,20 +25,20 @@ public class Giro360 : MonoBehaviour
             var go = GameObject.Find(nombreObjetivo);
             if (go) objetivo = go.transform;
         }
-        yaw = anguloInicial;
-        Aplicar();
+        pivote = objetivo ? objetivo.position : new Vector3(0f, 1.15f, 0f);
+        if (objetivo) gato = objetivo.root;
+        if (gato)
+        {
+            // si llega inclinado del juego, lo enderezamos (solo conserva el giro horizontal)
+            Quaternion enderezar = Quaternion.FromToRotation(gato.up, Vector3.up);
+            gato.SetPositionAndRotation(pivote + enderezar * (gato.position - pivote), enderezar * gato.rotation);
+        }
+        Quaternion rot = Quaternion.Euler(anguloVertical, anguloInicial, 0f);
+        transform.SetPositionAndRotation(pivote + rot * new Vector3(0f, 0f, -distancia), rot);
     }
 
     void LateUpdate()
     {
-        yaw = Mathf.Repeat(yaw + velocidad * Time.deltaTime, 360f);
-        Aplicar();
-    }
-
-    void Aplicar()
-    {
-        Vector3 centro = objetivo ? objetivo.position : new Vector3(0f, 1.15f, 0f);
-        Quaternion rot = Quaternion.Euler(anguloVertical, yaw, 0f);
-        transform.SetPositionAndRotation(centro + rot * new Vector3(0f, 0f, -distancia), rot);
+        if (gato) gato.RotateAround(pivote, Vector3.up, velocidad * Time.deltaTime);
     }
 }

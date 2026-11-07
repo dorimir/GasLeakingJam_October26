@@ -31,6 +31,8 @@ public class GestorMechones : MonoBehaviour
     public Camera camara;
     [Tooltip("Distancia a la cámara del mechón mientras lo arrastras fuera de la cabeza")]
     public float distanciaArrastre = 2.5f;
+    [Tooltip("Distancia (a escala 1 del mechón) a un pelo medio calvo dentro de la cual no se puede pegar")]
+    public float radioBloqueo = 0.09f;
 
     [Header("UI")]
     public Image rellenoBarra;
@@ -49,6 +51,7 @@ public class GestorMechones : MonoBehaviour
     [HideInInspector] public bool modoPeine;
 
     readonly List<Mechon> mechones = new List<Mechon>();
+    readonly List<Vector4> manchas = new List<Vector4>();   // xyz = punto, w = radio
     Vector3[] muestrasLocales = new Vector3[0];
     Mechon arrastrado;
     Color colorIcono = Color.white;
@@ -114,6 +117,8 @@ public class GestorMechones : MonoBehaviour
         if (m.sobreCabeza)
         {
             m.estado = Mechon.Estado.Colocado;
+            m.MarcarBloqueado(false);
+            if (colliderCabeza) m.transform.SetParent(colliderCabeza.transform, true);   // gira con el gato
         }
         else
         {
@@ -139,17 +144,32 @@ public class GestorMechones : MonoBehaviour
     {
         if (colliderCabeza && colliderCabeza.Raycast(rayo, out RaycastHit hit, 100f))
         {
-            arrastrado.sobreCabeza = true;
+            bool bloqueado = HayPeloCerca(hit.point);
+            arrastrado.sobreCabeza = !bloqueado;          // sobre un pelo: no se pega (al soltar vuelve al contador)
             arrastrado.puntoSuperficie = hit.point;
             arrastrado.transform.SetPositionAndRotation(
                 hit.point + hit.normal * separacionSuperficie,
                 RotacionSobreSuperficie(hit.normal));
+            arrastrado.MarcarBloqueado(bloqueado);
         }
         else
         {
             arrastrado.sobreCabeza = false;
             arrastrado.transform.SetPositionAndRotation(rayo.GetPoint(distanciaArrastre), RotacionHaciaCamara());
+            arrastrado.MarcarBloqueado(false);
         }
+    }
+
+    readonly Collider[] cercanos = new Collider[16];
+
+    /// ¿Hay algún pelo medio calvo (PeloBloqueo) cerca de este punto?
+    bool HayPeloCerca(Vector3 punto)
+    {
+        float r = radioBloqueo * (arrastrado ? arrastrado.transform.lossyScale.x : 1f);
+        int n = Physics.OverlapSphereNonAlloc(punto, r, cercanos, ~0, QueryTriggerInteraction.Collide);
+        for (int i = 0; i < n; i++)
+            if (cercanos[i] && cercanos[i].GetComponentInParent<PeloBloqueo>()) return true;
+        return false;
     }
 
     Quaternion RotacionSobreSuperficie(Vector3 normal)
@@ -166,7 +186,7 @@ public class GestorMechones : MonoBehaviour
 
     bool SobreUI()
     {
-        return EventSystem.current != null && EventSystem.current.IsPointerOverGameObject();
+        return Mouse.current != null && UtilUI.PunteroSobreUIInteractiva(Mouse.current.position.ReadValue());
     }
 
     // ---------- Calvicie ----------
@@ -207,28 +227,50 @@ public class GestorMechones : MonoBehaviour
             Debug.LogWarning("[GestorMechones] No se encontró la zona calva (revisa mallaCabeza y submallaCalva).");
     }
 
+    /// Recalcula el % de calvicie (lo llaman también el peine y el grafitti).
+    public void RecalcularCobertura() { Recalcular(); }
+
+    /// Registra una mancha de pintura que tapa la calva (grafitti).
+    public void RegistrarMancha(Vector3 punto, float radio)
+    {
+        // se guarda relativa a la cabeza, para que siga tapando aunque el gato gire
+        Vector3 local = mallaCabeza ? mallaCabeza.transform.InverseTransformPoint(punto) : punto;
+        manchas.Add(new Vector4(local.x, local.y, local.z, radio));
+        Recalcular();
+    }
+
     void Recalcular()
     {
         int cubiertas = 0;
-        float r2 = radioCobertura * radioCobertura;
         Transform tc = mallaCabeza ? mallaCabeza.transform : null;
         if (tc != null)
         {
             foreach (var s in muestrasLocales)
             {
                 Vector3 w = tc.TransformPoint(s);
-                foreach (var m in mechones)
-                {
-                    bool cuenta = m.estado == Mechon.Estado.Colocado ||
-                                  (m.estado == Mechon.Estado.Arrastrando && m.sobreCabeza);
-                    if (cuenta && (w - m.puntoSuperficie).sqrMagnitude < r2) { cubiertas++; break; }
-                }
+                if (Cubierto(w)) cubiertas++;
             }
         }
         int total = muestrasLocales.Length;
         PorcentajeCalvicie = total > 0 ? 100f * (1f - cubiertas / (float)total) : 0f;
         MechonesDisponibles = Mathf.Max(0, numeroMechones - mechones.Count);
         ActualizarUI();
+    }
+
+    bool Cubierto(Vector3 w)
+    {
+        foreach (var mc in manchas)
+        {
+            Vector3 p = mallaCabeza ? mallaCabeza.transform.TransformPoint(new Vector3(mc.x, mc.y, mc.z)) : new Vector3(mc.x, mc.y, mc.z);
+            if ((w - p).sqrMagnitude < mc.w * mc.w) return true;
+        }
+        foreach (var m in mechones)
+        {
+            bool cuenta = m.estado == Mechon.Estado.Colocado ||
+                          (m.estado == Mechon.Estado.Arrastrando && m.sobreCabeza);
+            if (cuenta && m.Cubre(w, radioCobertura)) return true;
+        }
+        return false;
     }
 
     void ActualizarUI()

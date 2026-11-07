@@ -35,6 +35,11 @@ public class Peine : MonoBehaviour
     public void Alternar()
     {
         Activo = !Activo;
+        if (Activo)
+        {
+            var g = FindFirstObjectByType<Grafitti>();
+            if (g && g.Activo) g.Alternar();   // solo una herramienta a la vez
+        }
         if (gestor) gestor.modoPeine = Activo;
         ActualizarUI();
     }
@@ -54,7 +59,7 @@ public class Peine : MonoBehaviour
 
         if (mouse.leftButton.wasPressedThisFrame)
         {
-            peinando = !(EventSystem.current != null && EventSystem.current.IsPointerOverGameObject());
+            peinando = !UtilUI.PunteroSobreUIInteractiva(pos);
             tienePunto = false;
         }
         if (!mouse.leftButton.isPressed || !peinando) { peinando = false; return; }
@@ -73,6 +78,7 @@ public class Peine : MonoBehaviour
             if (m.estado == Mechon.Estado.Colocado)
                 m.Peinar(hit.point, delta, radioPeine, fuerza);
         ultimoPunto = hit.point;
+        gestor.RecalcularCobertura();   // los pelos peinados encima de la calva también cuentan
     }
 
     void ActualizarUI()

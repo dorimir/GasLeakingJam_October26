@@ -22,7 +22,8 @@ public class PantallaResultados : MonoBehaviour
     /// Llamado por el botón "Volver a probar".
     public void VolverAProbar()
     {
-        Transicion.Ir(escenaJuego, () =>
+        string destino = string.IsNullOrEmpty(ResultadoPartida.escenaOrigen) ? escenaJuego : ResultadoPartida.escenaOrigen;
+        Transicion.Ir(destino, () =>
         {
             if (ResultadoPartida.busto) Destroy(ResultadoPartida.busto);
             ResultadoPartida.busto = null;
