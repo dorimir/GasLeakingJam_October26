@@ -4,9 +4,24 @@ using UnityEngine.SceneManagement;
 
 namespace Calvo
 {
+    /// <summary>Un audio del splash con su propio delay, volumen y fade in.</summary>
+    [System.Serializable]
+    public class AudioCue
+    {
+        [Tooltip("Solo para identificarlo en el Inspector.")]
+        public string name = "Audio";
+        [Tooltip("AudioSource con el clip asignado y Play On Awake desactivado.")]
+        public AudioSource source;
+        [Tooltip("Segundos desde que empieza el splash hasta que suena este audio.")]
+        public float delay = 0f;
+        [Range(0f, 1f)] public float volume = 1f;
+        [Tooltip("Segundos de fade in. 0 = empieza directamente al volumen indicado.")]
+        public float fadeInTime = 0f;
+    }
+
     /// <summary>
-    /// Splash screen: reproduce una animacion + musica, muestra el titulo de la empresa
-    /// con fade in, espera a que termine y carga la siguiente escena.
+    /// Splash screen: reproduce una animacion + varios audios mezclados, muestra el titulo de la empresa
+    /// con fade in, espera a que termine todo y carga la siguiente escena.
     /// El cursor permanece oculto y bloqueado, y no se puede saltar.
     /// </summary>
     public class SplashScreen : MonoBehaviour
@@ -19,7 +34,7 @@ namespace Calvo
         [SerializeField] private int layer = 0;
         [Tooltip("Pausa extra cuando termina la animacion, antes de cambiar de escena.")]
         [SerializeField] private float extraWaitAfterEnd = 0.5f;
-        [Tooltip("Seguro: si la animacion no termina en este tiempo, se continua igualmente.")]
+        [Tooltip("Seguro: si la animacion o los audios no terminan en este tiempo, se continua igualmente.")]
         [SerializeField] private float maxWaitTime = 20f;
 
         [Header("Titulo (Gas Leaking)")]
@@ -29,12 +44,9 @@ namespace Calvo
         [SerializeField] private float titleDelay = 1f;
         [SerializeField] private float titleFadeTime = 1f;
 
-        [Header("Musica")]
-        [Tooltip("AudioSource con el clip del splash. Play On Awake desactivado. Opcional.")]
-        [SerializeField] private AudioSource audioSource;
-        [Tooltip("Segundos desde que empieza el splash hasta que suena la musica.")]
-        [SerializeField] private float musicDelay = 0f;
-        [Tooltip("Si esta activo, no se cambia de escena hasta que termine el audio.")]
+        [Header("Audios (se mezclan; empieza antes el que tenga menos delay)")]
+        [SerializeField] private AudioCue[] audioCues;
+        [Tooltip("Si esta activo, no se cambia de escena hasta que terminen todos los audios.")]
         [SerializeField] private bool waitForAudio = true;
 
         [Header("Escena")]
@@ -45,6 +57,7 @@ namespace Calvo
 
         private bool _animationDone;
         private bool _splashActive;
+        private int _cuesRunning;
 
         private void Awake()
         {
@@ -62,7 +75,12 @@ namespace Calvo
             }
 
             if (titleGroup != null) titleGroup.alpha = 0f;
-            if (audioSource != null) audioSource.playOnAwake = false;
+
+            if (audioCues != null)
+            {
+                foreach (AudioCue cue in audioCues)
+                    if (cue != null && cue.source != null) cue.source.playOnAwake = false;
+            }
         }
 
         private void Start()
@@ -105,8 +123,8 @@ namespace Calvo
                 animator.Play(stateName, layer, 0f);
             yield return null;
 
-            // Musica y titulo en paralelo con la animacion
-            StartCoroutine(PlayMusic());
+            // Audios y titulo en paralelo con la animacion
+            StartAudioCues();
             StartCoroutine(FadeTitle());
 
             // Espera a que la animacion termine (o salte el seguro)
@@ -130,11 +148,11 @@ namespace Calvo
             // Pausa extra
             yield return new WaitForSecondsRealtime(extraWaitAfterEnd);
 
-            // Espera a que termine la musica (con seguro)
-            if (waitForAudio && audioSource != null)
+            // Espera a que terminen todos los audios (incluidos los que aun no han empezado)
+            if (waitForAudio)
             {
                 float audioWait = 0f;
-                while (audioSource.isPlaying && audioWait < maxWaitTime)
+                while (_cuesRunning > 0 && audioWait < maxWaitTime)
                 {
                     audioWait += Time.unscaledDeltaTime;
                     yield return null;
@@ -152,19 +170,51 @@ namespace Calvo
             op.allowSceneActivation = true;
         }
 
-        private IEnumerator PlayMusic()
+        private void StartAudioCues()
         {
-            if (audioSource == null) yield break;
+            if (audioCues == null) return;
 
-            if (musicDelay > 0f) yield return new WaitForSecondsRealtime(musicDelay);
-
-            if (audioSource.clip == null)
+            // Primero se cuentan los validos, para que la espera final sepa cuantos faltan
+            foreach (AudioCue cue in audioCues)
             {
-                Debug.LogWarning("SplashScreen: el AudioSource no tiene ningun clip asignado.", this);
-                yield break;
+                if (cue == null || cue.source == null) continue;
+
+                if (cue.source.clip == null)
+                {
+                    Debug.LogWarning($"SplashScreen: el audio '{cue.name}' no tiene clip asignado.", this);
+                    continue;
+                }
+
+                _cuesRunning++;
+                StartCoroutine(PlayCue(cue));
+            }
+        }
+
+        private IEnumerator PlayCue(AudioCue cue)
+        {
+            if (cue.delay > 0f) yield return new WaitForSecondsRealtime(cue.delay);
+
+            cue.source.volume = cue.fadeInTime > 0f ? 0f : cue.volume;
+            cue.source.Play();
+
+            // Fade in
+            if (cue.fadeInTime > 0f)
+            {
+                float t = 0f;
+                while (t < cue.fadeInTime)
+                {
+                    t += Time.unscaledDeltaTime;
+                    cue.source.volume = Mathf.Lerp(0f, cue.volume, Mathf.Clamp01(t / cue.fadeInTime));
+                    yield return null;
+                }
+
+                cue.source.volume = cue.volume;
             }
 
-            audioSource.Play();
+            // Espera a que termine este audio
+            while (cue.source.isPlaying) yield return null;
+
+            _cuesRunning--;
         }
 
         private IEnumerator FadeTitle()
