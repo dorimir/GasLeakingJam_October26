@@ -43,6 +43,9 @@ public class GestorMechones : MonoBehaviour
 
     public float PorcentajeCalvicie { get; private set; } = 100f;
     public int MechonesDisponibles { get; private set; }
+    public IReadOnlyList<Mechon> Mechones => mechones;
+    /// Con el peine activo no se cogen mechones con el clic izquierdo.
+    [HideInInspector] public bool modoPeine;
 
     readonly List<Mechon> mechones = new List<Mechon>();
     Vector3[] muestrasLocales = new Vector3[0];
@@ -67,9 +70,9 @@ public class GestorMechones : MonoBehaviour
     {
         var mouse = Mouse.current;
         if (mouse == null || camara == null) return;
-        Ray rayo = camara.ScreenPointToRay(mouse.position.ReadValue());
+        Ray rayo = EfectoPixelado.RayoDesdePantalla(camara, mouse.position.ReadValue());
 
-        if (arrastrado == null && mouse.leftButton.wasPressedThisFrame && !SobreUI())
+        if (arrastrado == null && !modoPeine && mouse.leftButton.wasPressedThisFrame && !SobreUI())
         {
             var m = BuscarMechon(rayo);
             if (m) EmpezarArrastre(m);
@@ -92,14 +95,14 @@ public class GestorMechones : MonoBehaviour
     /// Lo llama el panel lateral de UI al pulsar sobre él: coge un mechón libre y empieza a arrastrarlo.
     public bool EmpezarArrastreDesdeUI()
     {
-        if (arrastrado != null) return false;
+        if (arrastrado != null || modoPeine) return false;
         foreach (var m in mechones)
         {
             if (m.estado != Mechon.Estado.EnBandeja) continue;
             m.gameObject.SetActive(true);
             EmpezarArrastre(m);
             var mouse = Mouse.current;
-            if (mouse != null) MoverArrastrado(camara.ScreenPointToRay(mouse.position.ReadValue()));
+            if (mouse != null) MoverArrastrado(EfectoPixelado.RayoDesdePantalla(camara, mouse.position.ReadValue()));
             Recalcular();
             return true;
         }
