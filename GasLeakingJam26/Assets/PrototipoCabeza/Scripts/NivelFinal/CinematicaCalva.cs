@@ -14,7 +14,7 @@ public class CinematicaCalva : MonoBehaviour
     public float distanciaInicial = 4.2f;
     public float anguloVerticalInicial = 12f;
     [Tooltip("Lado desde el que mira la cámara: 180 = de frente")]
-    public float anguloHorizontalInicial = 180f;
+    public float anguloHorizontalInicial = 0f;
 
     [Header("Final (zoom en la calva)")]
     public float distanciaFinal = 1.3f;
@@ -26,6 +26,10 @@ public class CinematicaCalva : MonoBehaviour
     [Tooltip("Grados por segundo que gira el gato (frena al llegar al zoom)")]
     public float velocidadGiro = 40f;
     [Range(0f, 1f)] public float giroAlFinal = 0.25f;
+    [Tooltip("El gato empieza de espaldas a la cámara (se ve la calva desde detrás)")]
+    public bool empezarDeEspaldas = true;
+    [Tooltip("No gira hasta terminar el zoom a la calva")]
+    public bool girarDespuesDelZoom = true;
 
     Transform gato;
     Vector3 pivote;
@@ -44,6 +48,15 @@ public class CinematicaCalva : MonoBehaviour
             gato = centroCabeza.root;
             Quaternion enderezar = Quaternion.FromToRotation(gato.up, Vector3.up);   // por si llega inclinado
             gato.SetPositionAndRotation(pivote + enderezar * (gato.position - pivote), enderezar * gato.rotation);
+            if (empezarDeEspaldas)
+            {
+                // gira el gato para que su nuca mire a la cámara
+                Vector3 camPos = pivote + Quaternion.Euler(0f, anguloHorizontalInicial, 0f) * new Vector3(0f, 0f, -1f);
+                Vector3 cara = Vector3.ProjectOnPlane(gato.forward, Vector3.up);
+                Vector3 lejosDeCamara = Vector3.ProjectOnPlane(pivote - camPos, Vector3.up);
+                float a = Vector3.SignedAngle(cara, lejosDeCamara, Vector3.up);
+                gato.RotateAround(pivote, Vector3.up, a);
+            }
         }
         Aplicar(0f);
     }
@@ -53,7 +66,13 @@ public class CinematicaCalva : MonoBehaviour
         t += Time.deltaTime;
         float k = Mathf.Clamp01((t - retrasoInicial) / Mathf.Max(0.01f, duracionZoom));
         k = k * k * (3f - 2f * k);   // suave al empezar y al llegar
-        if (gato) gato.RotateAround(pivote, Vector3.up, velocidadGiro * Mathf.Lerp(1f, giroAlFinal, k) * Time.deltaTime);
+        if (gato)
+        {
+            // primero el zoom a la calva sin girar; el giro arranca al terminar el zoom
+            float giro = girarDespuesDelZoom ? Mathf.Clamp01((t - retrasoInicial - duracionZoom) / 1.5f) * giroAlFinal
+                                             : Mathf.Lerp(1f, giroAlFinal, k);
+            gato.RotateAround(pivote, Vector3.up, velocidadGiro * giro * Time.deltaTime);
+        }
         Aplicar(k);
     }
 

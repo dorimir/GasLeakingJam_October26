@@ -216,13 +216,15 @@ MonoBehaviour:
   desplazamientoCalva: {x: 0, y: 0.48, z: -0.08}
   distanciaInicial: 4.2
   anguloVerticalInicial: 12
-  anguloHorizontalInicial: 180
+  anguloHorizontalInicial: 0
   distanciaFinal: 1.3
   anguloVerticalFinal: 62
   duracionZoom: 6
   retrasoInicial: 0.8
   velocidadGiro: 40
   giroAlFinal: 0.25
+  empezarDeEspaldas: 1
+  girarDespuesDelZoom: 1
 --- !u!81 &64398931
 AudioListener:
   m_ObjectHideFlags: 0

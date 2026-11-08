@@ -33,6 +33,12 @@ public class GestorMechones : MonoBehaviour
     public float distanciaArrastre = 2.5f;
     [Tooltip("Distancia (a escala 1 del mechón) a un pelo medio calvo dentro de la cual no se puede pegar")]
     public float radioBloqueo = 0.09f;
+    [Tooltip("Solo se pueden pegar mechones en el cuero cabelludo (la submalla calva)")]
+    public bool soloEnCueroCabelludo = true;
+    [Tooltip("Hasta qué altura sobre la piel se busca pelo del peinado (metros)")]
+    public float alcancePeinado = 0.5f;
+    [Tooltip("Apertura (grados) de los rayos inclinados: más = el pelo tapa más alrededor")]
+    public float aperturaPeinado = 20f;
 
     [Header("UI")]
     public Image rellenoBarra;
@@ -52,7 +58,12 @@ public class GestorMechones : MonoBehaviour
 
     readonly List<Mechon> mechones = new List<Mechon>();
     readonly List<Vector4> manchas = new List<Vector4>();   // xyz = punto, w = radio
+    bool[] cubiertoPorPeinado;
+    int triInicioCalva, triFinCalva;
+    /// % del cuero cabelludo que tapa el peinado (informativo)
+    public float PeinadoCubre { get; private set; }
     Vector3[] muestrasLocales = new Vector3[0];
+    Vector3[] normalesLocales = new Vector3[0];
     Mechon arrastrado;
     Color colorIcono = Color.white;
 
@@ -144,7 +155,10 @@ public class GestorMechones : MonoBehaviour
     {
         if (colliderCabeza && colliderCabeza.Raycast(rayo, out RaycastHit hit, 100f))
         {
-            bool bloqueado = HayPeloCerca(hit.point);
+            // no se puede pegar fuera del cuero cabelludo (cara, orejas, cuerpo) ni sobre el peinado
+            bool fueraDeZona = soloEnCueroCabelludo && hit.triangleIndex >= 0 && triFinCalva > 0 &&
+                               (hit.triangleIndex < triInicioCalva || hit.triangleIndex >= triFinCalva);
+            bool bloqueado = fueraDeZona || HayPeloCerca(hit.point) || PeinadoEncima(hit.point, hit.normal);
             arrastrado.sobreCabeza = !bloqueado;          // sobre un pelo: no se pega (al soltar vuelve al contador)
             arrastrado.puntoSuperficie = hit.point;
             arrastrado.transform.SetPositionAndRotation(
@@ -195,10 +209,12 @@ public class GestorMechones : MonoBehaviour
     {
         // Puntos repartidos por área sobre los triángulos de la zona calva (sirve también para mallas low-poly).
         var lista = new List<Vector3>();
+        var normalesLista = new List<Vector3>();
         var malla = mallaCabeza ? mallaCabeza.sharedMesh : null;
         if (malla != null && submallaCalva < malla.subMeshCount)
         {
             var v = malla.vertices;
+            var nv = malla.normals;
             var t = malla.GetTriangles(submallaCalva);
             var tr = mallaCabeza.transform;
             int nTri = t.Length / 3;
@@ -219,16 +235,71 @@ public class GestorMechones : MonoBehaviour
                 {
                     float r1 = Mathf.Sqrt((float)rnd.NextDouble()), r2 = (float)rnd.NextDouble();
                     lista.Add((1f - r1) * a + r1 * (1f - r2) * b + r1 * r2 * c);
+                    normalesLista.Add((nv[t[i * 3]] + nv[t[i * 3 + 1]] + nv[t[i * 3 + 2]]).normalized);
                 }
             }
         }
         muestrasLocales = lista.ToArray();
+        normalesLocales = normalesLista.ToArray();
+        CalcularPeinado();
+        if (malla != null && submallaCalva < malla.subMeshCount)
+        {
+            var sm = malla.GetSubMesh(submallaCalva);
+            triInicioCalva = sm.indexStart / 3;
+            triFinCalva = triInicioCalva + sm.indexCount / 3;
+        }
         if (muestrasLocales.Length == 0)
             Debug.LogWarning("[GestorMechones] No se encontró la zona calva (revisa mallaCabeza y submallaCalva).");
     }
 
     /// Recalcula el % de calvicie (lo llaman también el peine y el grafitti).
     public void RecalcularCobertura() { Recalcular(); }
+
+    /// Marca qué puntos del cuero cabelludo tapa el peinado activo (objetos con PeloBloqueo).
+    /// Llámalo si cambias de peinado en mitad de la partida.
+    public void CalcularPeinado()
+    {
+        cubiertoPorPeinado = new bool[muestrasLocales.Length];
+        if (!mallaCabeza) return;
+        Physics.SyncTransforms();
+        var tr = mallaCabeza.transform;
+        int n = 0;
+        for (int i = 0; i < muestrasLocales.Length; i++)
+        {
+            Vector3 w = tr.TransformPoint(muestrasLocales[i]);
+            Vector3 nrm = i < normalesLocales.Length ? tr.TransformDirection(normalesLocales[i]).normalized : (w - tr.position).normalized;
+            // un rayo recto hacia fuera y 4 inclinados: si alguno toca pelo, ese punto está tapado
+            Vector3 t1 = Vector3.Cross(nrm, Vector3.up); if (t1.sqrMagnitude < 1e-4f) t1 = Vector3.Cross(nrm, Vector3.right);
+            t1.Normalize(); Vector3 t2 = Vector3.Cross(nrm, t1);
+            float inc = Mathf.Tan(aperturaPeinado * Mathf.Deg2Rad);
+            Vector3 origen = w + nrm * 0.003f;
+            if (TocaPeinado(origen, nrm) || TocaPeinado(origen, nrm + t1 * inc) || TocaPeinado(origen, nrm - t1 * inc) ||
+                TocaPeinado(origen, nrm + t2 * inc) || TocaPeinado(origen, nrm - t2 * inc))
+            { cubiertoPorPeinado[i] = true; n++; }
+        }
+        PeinadoCubre = muestrasLocales.Length > 0 ? 100f * n / muestrasLocales.Length : 0f;
+    }
+
+    readonly RaycastHit[] golpes = new RaycastHit[8];
+    /// ¿Hay pelo del peinado encima de este punto de la piel? (mismo criterio que el contador)
+    bool PeinadoEncima(Vector3 punto, Vector3 normal)
+    {
+        Vector3 n = normal.normalized;
+        Vector3 t1 = Vector3.Cross(n, Vector3.up); if (t1.sqrMagnitude < 1e-4f) t1 = Vector3.Cross(n, Vector3.right);
+        t1.Normalize(); Vector3 t2 = Vector3.Cross(n, t1);
+        float inc = Mathf.Tan(aperturaPeinado * Mathf.Deg2Rad);
+        Vector3 o = punto + n * 0.003f;
+        return TocaPeinado(o, n) || TocaPeinado(o, n + t1 * inc) || TocaPeinado(o, n - t1 * inc) ||
+               TocaPeinado(o, n + t2 * inc) || TocaPeinado(o, n - t2 * inc);
+    }
+
+    bool TocaPeinado(Vector3 origen, Vector3 dir)
+    {
+        int k = Physics.RaycastNonAlloc(origen, dir.normalized, golpes, alcancePeinado, ~0, QueryTriggerInteraction.Collide);
+        for (int j = 0; j < k; j++)
+            if (golpes[j].collider && golpes[j].collider.GetComponentInParent<PeloBloqueo>()) return true;
+        return false;
+    }
 
     /// Registra una mancha de pintura que tapa la calva (grafitti).
     public void RegistrarMancha(Vector3 punto, float radio)
@@ -245,9 +316,10 @@ public class GestorMechones : MonoBehaviour
         Transform tc = mallaCabeza ? mallaCabeza.transform : null;
         if (tc != null)
         {
-            foreach (var s in muestrasLocales)
+            for (int i = 0; i < muestrasLocales.Length; i++)
             {
-                Vector3 w = tc.TransformPoint(s);
+                if (cubiertoPorPeinado != null && i < cubiertoPorPeinado.Length && cubiertoPorPeinado[i]) { cubiertas++; continue; }
+                Vector3 w = tc.TransformPoint(muestrasLocales[i]);
                 if (Cubierto(w)) cubiertas++;
             }
         }
@@ -281,7 +353,7 @@ public class GestorMechones : MonoBehaviour
             rellenoBarra.fillAmount = f;
             rellenoBarra.color = Color.Lerp(colorCubierto, colorCalvo, f);
         }
-        if (textoCalvicie) textoCalvicie.text = $"Calvicie: {Mathf.RoundToInt(PorcentajeCalvicie)}%";
+        if (textoCalvicie) textoCalvicie.text = $"{Mathf.RoundToInt(PorcentajeCalvicie)}%";   // solo el número
         if (textoMechones) textoMechones.text = $"x {MechonesDisponibles}";
         if (iconoContador)
         {

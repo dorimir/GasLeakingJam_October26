@@ -317,7 +317,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 6181c3b2778983d4ab54f4d63902be8b, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 226ab64416f7f474aa6bebf06fd61781, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -2112,7 +2112,8 @@ MonoBehaviour:
   objetivo: {fileID: 541042402}
   girarObjetivo: 1
   objetoGirar: {fileID: 0}
-  inclinacionMax: 35
+  inclinacionHaciaCamara: 80
+  inclinacionHaciaAtras: 30
   sensibilidadHorizontal: 0.3
   sensibilidadVertical: 0.25
   invertirHorizontal: 0
