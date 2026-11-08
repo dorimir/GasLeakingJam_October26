@@ -44,6 +44,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/CinematicaFinal.unity
     guid: 4a0d338364f63a44e844021013dd18dc
+  - enabled: 1
+    path: Assets/Scenes/Pastilla.unity
+    guid: 5ba4e988660db054fad3c8d247887af3
+  - enabled: 1
+    path: "Assets/Scenes/Cinem\xE1ticaPastilla.unity"
+    guid: 8c90981d72d32c44db63bf5ebb9d2f32
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

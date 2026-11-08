@@ -82,7 +82,7 @@ public class CinematicSequence : MonoBehaviour, IPointerClickHandler
         if (_leaving) return;
         _leaving = true;
         StopAllCoroutines();
-        SceneManager.LoadScene(nextScene);
+        Transicion.Ir(nextScene, null, 1f);   // transición suave también al saltar
     }
 
     // ------------------------------------------------------------------
@@ -218,7 +218,9 @@ public class CinematicSequence : MonoBehaviour, IPointerClickHandler
             SetOverlayAlpha(1f);
         }
 
-        SceneManager.LoadScene(nextScene);
+        // la pantalla ya está en negro: el nivel aparece con un fundido suave
+        if (fadeOverlay != null && fadeToBlackTime > 0f) Transicion.IrDesdeNegro(nextScene, 1.2f);
+        else Transicion.Ir(nextScene, null, 1f);
     }
 
     // ---------- Utilidades de fundido ----------
