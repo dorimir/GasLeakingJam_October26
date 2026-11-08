@@ -16,6 +16,8 @@ public class GestorMechones : MonoBehaviour
     public Mechon prefabMechon;
     [Tooltip("Radio (en metros) de calva que tapa cada mechón")]
     public float radioCobertura = 0.13f;
+    [Tooltip("Multiplica lo que tapa cada mechón (parche y pelos) y cada mancha. Más = el % baja más con cada uno.")]
+    public float multiplicadorCobertura = 2f;
     public float separacionSuperficie = 0.01f;
 
     [Header("Cabeza")]
@@ -35,6 +37,21 @@ public class GestorMechones : MonoBehaviour
     public float radioBloqueo = 0.09f;
     [Tooltip("Solo se pueden pegar mechones en el cuero cabelludo (la submalla calva)")]
     public bool soloEnCueroCabelludo = true;
+    [Tooltip("Estricto: no deja pegar si hay pelo cerca o inclinado alrededor. Desactivado: solo si hay pelo justo encima.")]
+    public bool bloqueoEstricto = false;
+    [Tooltip("Margen (metros) alrededor del cuero cabelludo donde también se pueden pegar mechones")]
+    public float margenZona = 0.08f;
+    [Tooltip("Zona objetivo del nivel: cada hijo es una esfera (escala X = diámetro). Solo cuenta para el % lo que hay dentro, y solo ahí se pueden pegar mechones.")]
+    public Transform zonaObjetivo;
+    [Tooltip("Dentro de la zona objetivo, los mechones se pueden pegar ENCIMA del pelo del peinado (y tapan la calva de debajo)")]
+    public bool pegarSobrePeloEnZona = true;
+    [Tooltip("Hay que tapar TODA la zona objetivo: el % de partida baja según la parte de la zona que tapes con mechones (aunque haya pelo debajo)")]
+    public bool zonaEnteraCuenta = false;
+    [Tooltip("Con 'zona entera': % de alopecia al empezar el nivel. -1 = calcularlo solo.")]
+    public float porcentajeInicialZona = -1f;
+    [Tooltip("Con 'zona entera': qué parte de la zona hay que tapar para llegar a 0% (0.85 = el 85%)")]
+    [Range(0.3f, 1f)] public float fraccionParaCompletar = 0.85f;
+    float porcentajeBaseZona;
     [Tooltip("Hasta qué altura sobre la piel se busca pelo del peinado (metros)")]
     public float alcancePeinado = 0.5f;
     [Tooltip("Apertura (grados) de los rayos inclinados: más = el pelo tapa más alrededor")]
@@ -153,12 +170,19 @@ public class GestorMechones : MonoBehaviour
 
     void MoverArrastrado(Ray rayo)
     {
+        if (pegarSobrePeloEnZona && HayZonaObjetivo() && PegarSobrePelo(rayo)) return;
         if (colliderCabeza && colliderCabeza.Raycast(rayo, out RaycastHit hit, 100f))
         {
             // no se puede pegar fuera del cuero cabelludo (cara, orejas, cuerpo) ni sobre el peinado
-            bool fueraDeZona = soloEnCueroCabelludo && hit.triangleIndex >= 0 && triFinCalva > 0 &&
-                               (hit.triangleIndex < triInicioCalva || hit.triangleIndex >= triFinCalva);
-            bool bloqueado = fueraDeZona || HayPeloCerca(hit.point) || PeinadoEncima(hit.point, hit.normal);
+            bool fueraDeZona = HayZonaObjetivo()
+                ? !DentroZonaObjetivo(hit.point, margenZona)          // solo dentro de la zona objetivo del nivel (con margen)
+                : (soloEnCueroCabelludo && hit.triangleIndex >= 0 && triFinCalva > 0 &&
+                   (hit.triangleIndex < triInicioCalva || hit.triangleIndex >= triFinCalva) &&
+                   !CercaDelCueroCabelludo(hit.point));
+            bool sobrePelo = bloqueoEstricto
+                ? (HayPeloCerca(hit.point) || PeinadoEncima(hit.point, hit.normal))
+                : TocaPeinado(hit.point + hit.normal * 0.003f, hit.normal);   // solo si hay pelo justo encima
+            bool bloqueado = fueraDeZona || sobrePelo;
             arrastrado.sobreCabeza = !bloqueado;          // sobre un pelo: no se pega (al soltar vuelve al contador)
             arrastrado.puntoSuperficie = hit.point;
             arrastrado.transform.SetPositionAndRotation(
@@ -172,6 +196,42 @@ public class GestorMechones : MonoBehaviour
             arrastrado.transform.SetPositionAndRotation(rayo.GetPoint(distanciaArrastre), RotacionHaciaCamara());
             arrastrado.MarcarBloqueado(false);
         }
+    }
+
+    /// Si el ratón apunta al pelo del peinado y debajo está la zona objetivo, pega el mechón encima del pelo.
+    bool PegarSobrePelo(Ray rayo)
+    {
+        // pelo más cercano bajo el ratón
+        var hits = Physics.RaycastAll(rayo, 100f, ~0, QueryTriggerInteraction.Collide);
+        RaycastHit pelo = default(RaycastHit); bool hayPelo = false;
+        foreach (var h in hits)
+            if (h.collider && h.collider.GetComponentInParent<PeloBloqueo>() && (!hayPelo || h.distance < pelo.distance)) { pelo = h; hayPelo = true; }
+        if (!hayPelo) return false;
+        // si la cabeza está delante del pelo, no es este caso
+        if (colliderCabeza && colliderCabeza.Raycast(rayo, out RaycastHit cab, 100f) && cab.distance < pelo.distance) return false;
+        // piel de debajo del pelo
+        Vector3 piel = pelo.point; Vector3 normal = pelo.normal;
+        Vector3 haciaDentro = mallaCabeza ? (mallaCabeza.transform.position + Vector3.up * 0.5f - pelo.point).normalized : -pelo.normal;
+        if (colliderCabeza && colliderCabeza.Raycast(new Ray(pelo.point - haciaDentro * 0.02f, haciaDentro), out RaycastHit pielHit, 1f))
+        { piel = pielHit.point; normal = pielHit.normal; }
+        if (!DentroZonaObjetivo(piel, margenZona) && !DentroZonaObjetivo(pelo.point, margenZona)) return false;
+
+        arrastrado.sobreCabeza = true;
+        arrastrado.puntoSuperficie = piel;
+        arrastrado.transform.SetPositionAndRotation(pelo.point + normal * separacionSuperficie, RotacionSobreSuperficie(normal));
+        arrastrado.MarcarBloqueado(false);
+        return true;
+    }
+
+    /// ¿Está el punto en el cuero cabelludo o a menos de 'margenZona' de él?
+    bool CercaDelCueroCabelludo(Vector3 punto)
+    {
+        if (!mallaCabeza) return true;
+        var tr = mallaCabeza.transform;
+        float m2 = margenZona * margenZona;
+        for (int i = 0; i < muestrasLocales.Length; i += 2)
+            if ((tr.TransformPoint(muestrasLocales[i]) - punto).sqrMagnitude < m2) return true;
+        return false;
     }
 
     readonly Collider[] cercanos = new Collider[16];
@@ -242,6 +302,7 @@ public class GestorMechones : MonoBehaviour
         muestrasLocales = lista.ToArray();
         normalesLocales = normalesLista.ToArray();
         CalcularPeinado();
+        CalcularZona();
         if (malla != null && submallaCalva < malla.subMeshCount)
         {
             var sm = malla.GetSubMesh(submallaCalva);
@@ -310,6 +371,52 @@ public class GestorMechones : MonoBehaviour
         Recalcular();
     }
 
+    // ---------- Zona objetivo (esferas hijas de 'zonaObjetivo') ----------
+    bool[] enZona;
+    int totalEnZona;
+
+    bool HayZonaObjetivo()
+    {
+        if (!zonaObjetivo) return false;
+        foreach (Transform e in zonaObjetivo) if (e.gameObject.activeInHierarchy) return true;
+        return false;
+    }
+
+    bool DentroZonaObjetivo(Vector3 p, float margen = 0f)
+    {
+        foreach (Transform e in zonaObjetivo)
+        {
+            if (!e.gameObject.activeInHierarchy) continue;
+            float r = Mathf.Abs(e.lossyScale.x) * 0.5f + margen;
+            if ((p - e.position).sqrMagnitude < r * r) return true;
+        }
+        return false;
+    }
+
+    /// Marca qué puntos del cuero cabelludo están dentro de la zona objetivo (lo único que cuenta).
+    public void CalcularZona()
+    {
+        enZona = null; totalEnZona = 0;
+        if (!HayZonaObjetivo() || !mallaCabeza) return;
+        var tr = mallaCabeza.transform;
+        enZona = new bool[muestrasLocales.Length];
+        for (int i = 0; i < muestrasLocales.Length; i++)
+            if (DentroZonaObjetivo(tr.TransformPoint(muestrasLocales[i]))) { enZona[i] = true; totalEnZona++; }
+        // % de partida (solo con el peinado) para el modo 'zona entera'
+        int calvas = 0;
+        for (int i = 0; i < muestrasLocales.Length; i++)
+            if (enZona[i] && !(cubiertoPorPeinado != null && i < cubiertoPorPeinado.Length && cubiertoPorPeinado[i])) calvas++;
+        porcentajeBaseZona = porcentajeInicialZona >= 0f ? porcentajeInicialZona : (totalEnZona > 0 ? 100f * calvas / totalEnZona : 0f);
+    }
+
+    void OnDrawGizmosSelected()
+    {
+        if (!zonaObjetivo) return;
+        Gizmos.color = new Color(0.3f, 1f, 0.4f, 0.9f);
+        foreach (Transform e in zonaObjetivo)
+            if (e.gameObject.activeInHierarchy) Gizmos.DrawWireSphere(e.position, Mathf.Abs(e.lossyScale.x) * 0.5f);
+    }
+
     void Recalcular()
     {
         int cubiertas = 0;
@@ -318,13 +425,23 @@ public class GestorMechones : MonoBehaviour
         {
             for (int i = 0; i < muestrasLocales.Length; i++)
             {
+                if (enZona != null && i < enZona.Length && !enZona[i]) continue;   // fuera de la zona objetivo: no cuenta
                 if (cubiertoPorPeinado != null && i < cubiertoPorPeinado.Length && cubiertoPorPeinado[i]) { cubiertas++; continue; }
                 Vector3 w = tc.TransformPoint(muestrasLocales[i]);
                 if (Cubierto(w)) cubiertas++;
             }
         }
-        int total = muestrasLocales.Length;
+        int total = totalEnZona > 0 ? totalEnZona : muestrasLocales.Length;
         PorcentajeCalvicie = total > 0 ? 100f * (1f - cubiertas / (float)total) : 0f;
+        if (zonaEnteraCuenta && enZona != null && totalEnZona > 0 && tc != null)
+        {
+            // el % de partida baja según cuánta zona objetivo tapas (con mechones/manchas, pelo incluido debajo)
+            int tapadas = 0;
+            for (int i = 0; i < muestrasLocales.Length; i++)
+                if (enZona[i] && Cubierto(tc.TransformPoint(muestrasLocales[i]))) tapadas++;
+            float frac = tapadas / (float)totalEnZona / Mathf.Max(0.01f, fraccionParaCompletar);   // tapando esa fracción ya es 0%
+            PorcentajeCalvicie = porcentajeBaseZona * Mathf.Clamp01(1f - frac);
+        }
         MechonesDisponibles = Mathf.Max(0, numeroMechones - mechones.Count);
         ActualizarUI();
     }
@@ -334,13 +451,14 @@ public class GestorMechones : MonoBehaviour
         foreach (var mc in manchas)
         {
             Vector3 p = mallaCabeza ? mallaCabeza.transform.TransformPoint(new Vector3(mc.x, mc.y, mc.z)) : new Vector3(mc.x, mc.y, mc.z);
-            if ((w - p).sqrMagnitude < mc.w * mc.w) return true;
+            float rm = mc.w * multiplicadorCobertura;
+            if ((w - p).sqrMagnitude < rm * rm) return true;
         }
         foreach (var m in mechones)
         {
             bool cuenta = m.estado == Mechon.Estado.Colocado ||
                           (m.estado == Mechon.Estado.Arrastrando && m.sobreCabeza);
-            if (cuenta && m.Cubre(w, radioCobertura)) return true;
+            if (cuenta && m.Cubre(w, radioCobertura * multiplicadorCobertura, multiplicadorCobertura)) return true;
         }
         return false;
     }

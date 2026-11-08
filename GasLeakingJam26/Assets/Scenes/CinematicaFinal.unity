@@ -497,7 +497,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1551563187}
         m_TargetAssemblyTypeName: PantallaResultados, Assembly-CSharp
-        m_MethodName: VolverAProbar
+        m_MethodName: VolverAEmpezar
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -660,6 +660,11 @@ MonoBehaviour:
   textoValoracion: {fileID: 0}
   textoMechones: {fileID: 0}
   escenaJuego: PrototipoCabeza
+  gacha: {fileID: 0}
+  botonContinuar: {fileID: 0}
+  textoBotonContinuar: {fileID: 0}
+  textoSiguienteNivel: Siguiente nivel
+  textoNivelFinal: Nivel final
 --- !u!114 &1551563188
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -813,7 +818,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Volver a probar
+  m_Text: Volver a empezar
 --- !u!222 &1563745567
 CanvasRenderer:
   m_ObjectHideFlags: 0

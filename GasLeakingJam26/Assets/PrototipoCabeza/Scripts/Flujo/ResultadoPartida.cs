@@ -1,6 +1,6 @@
 using UnityEngine;
 
-/// Datos que viajan del prototipo a la escena de Resultados.
+/// Datos que viajan entre escenas (resultado de la partida y progreso de niveles).
 public static class ResultadoPartida
 {
     public static float porcentajeCalvicie = 100f;
@@ -10,4 +10,16 @@ public static class ResultadoPartida
     public static string escenaOrigen;
     /// Busto (con sus mechones) que se lleva a Resultados con DontDestroyOnLoad.
     public static GameObject busto;
+
+    // ---------- Niveles ----------
+    /// Niveles 1..4 se juegan en la escena de niveles; el 5 es el nivel final.
+    public const int nivelesNormales = 4;
+    public const string escenaNiveles = "PrototipoCabeza";   // escena de pruebas (todas las etapas)
+    /// Cada nivel 1..4 tiene su propia escena: Nivel1, Nivel2, Nivel3, Nivel4.
+    public static string EscenaNivel(int n) { return "Nivel" + n; }
+    public const string escenaFinal = "NivelFinal";
+    /// Nivel que se está jugando (1..5).
+    public static int nivel = 1;
+    /// true en cuanto se pasa de nivel por el flujo del juego (para que el 'nivel de prueba' del editor no moleste).
+    public static bool flujoIniciado;
 }

@@ -1085,7 +1085,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: Volver a probar
+  m_Text: Continuar
 --- !u!222 &1178426666
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -1475,7 +1475,7 @@ GameObject:
   - component: {fileID: 1845962293}
   - component: {fileID: 1845962292}
   m_Layer: 0
-  m_Name: BotonVolverAProbar
+  m_Name: BotonContinuar
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1547,7 +1547,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 1935374644}
         m_TargetAssemblyTypeName: PantallaResultados, Assembly-CSharp
-        m_MethodName: VolverAProbar
+        m_MethodName: Continuar
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1726,6 +1726,11 @@ MonoBehaviour:
   textoValoracion: {fileID: 1143719724}
   textoMechones: {fileID: 1508358914}
   escenaJuego: PrototipoCabeza
+  gacha: {fileID: 1833948262}
+  botonContinuar: {fileID: 1845962292}
+  textoBotonContinuar: {fileID: 1178426665}
+  textoSiguienteNivel: Siguiente nivel
+  textoNivelFinal: Nivel final
 --- !u!114 &1935374645
 MonoBehaviour:
   m_ObjectHideFlags: 0

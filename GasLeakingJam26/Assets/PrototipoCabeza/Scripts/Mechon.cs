@@ -70,12 +70,16 @@ public class Mechon : MonoBehaviour
     }
 
     /// ¿Tapa este mechón el punto 'w' de la cabeza? (parche + pelos)
-    public bool Cubre(Vector3 w, float radioParche)
+    public bool Cubre(Vector3 w, float radioParche, float factorPelo = 1f)
     {
         float escala = transform.lossyScale.x;
         float rp = radioParche * escala;
-        if ((w - transform.position).sqrMagnitude < rp * rp) return true;   // sigue al gato aunque gire
-        float rpelo = radioPelo * escala;
+        // distancia medida "en planta" (sin la altura): si el mechón está encima del pelo, sigue tapando la piel de debajo
+        Vector3 d = w - transform.position;
+        float alto = Vector3.Dot(d, transform.up);
+        Vector3 plano = d - transform.up * alto;
+        if (Mathf.Abs(alto) < 0.3f && plano.sqrMagnitude < rp * rp) return true;
+        float rpelo = radioPelo * escala * factorPelo;
         float r2 = rpelo * rpelo;
         for (int i = 0; i < pelos.Count; i++)
         {

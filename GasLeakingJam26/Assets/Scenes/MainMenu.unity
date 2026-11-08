@@ -1602,7 +1602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f618bc9c80c1a44cbd1771f576712f3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::MainMenu
-  sceneToLoad: PrototipoCabeza
+  sceneToLoad: Nivel1
   creditsImage: {fileID: 637397943}
   backButton: {fileID: 723623325}
   musicSource: {fileID: 1025934087}

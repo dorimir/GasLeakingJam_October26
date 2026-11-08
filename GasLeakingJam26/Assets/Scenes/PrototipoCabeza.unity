@@ -2242,7 +2242,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 112ebac24f65d5b46b2d6c4e682f84a3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 2849527188737dc4e9dc30e3ae65e071, type: 3}
   m_Type: 0
   m_PreserveAspect: 1
   m_FillCenter: 1
@@ -6373,6 +6373,65 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
+--- !u!1 &1973928134
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1973928136}
+  - component: {fileID: 1973928135}
+  m_Layer: 0
+  m_Name: ConfiguradorNivel
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1973928135
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973928134}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51bbb0bf0eda1d346971f029e1511abb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ConfiguradorNivel
+  niveles:
+  - nombre: Nivel 1
+    peinado: {fileID: 939828240}
+    spriteListo: {fileID: 21300000, guid: 9586b476e9f470c438a3f446300da1d4, type: 3}
+  - nombre: Nivel 2
+    peinado: {fileID: 879717290}
+    spriteListo: {fileID: 21300000, guid: 5976c16546ad60c4e8346032fe43f773, type: 3}
+  - nombre: Nivel 3
+    peinado: {fileID: 2141467168}
+    spriteListo: {fileID: 21300000, guid: 95c3581d0f451d94388536ecf3629a92, type: 3}
+  - nombre: Nivel 4
+    peinado: {fileID: 309186464}
+    spriteListo: {fileID: 21300000, guid: 37ec25a689fd52c449276bec0d3827b9, type: 3}
+  imagenBotonListo: {fileID: 439080944}
+  nivelDePrueba: 0
+--- !u!4 &1973928136
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1973928134}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1981458904
 GameObject:
   m_ObjectHideFlags: 0
@@ -6498,6 +6557,7 @@ MonoBehaviour:
   numeroMechones: 8
   prefabMechon: {fileID: 8168713802554486646, guid: ab8fca6e2335061438e24c5a8425efca, type: 3}
   radioCobertura: 0.13
+  multiplicadorCobertura: 3
   separacionSuperficie: 0.01
   colliderCabeza: {fileID: 1240881465}
   mallaCabeza: {fileID: 1240881463}
@@ -6507,6 +6567,8 @@ MonoBehaviour:
   distanciaArrastre: 2.5
   radioBloqueo: 0.09
   soloEnCueroCabelludo: 1
+  bloqueoEstricto: 0
+  margenZona: 0.08
   alcancePeinado: 0.5
   aperturaPeinado: 30
   rellenoBarra: {fileID: 484785803}
@@ -6909,3 +6971,4 @@ SceneRoots:
   - {fileID: 1993137298}
   - {fileID: 1708814315}
   - {fileID: 1881581793}
+  - {fileID: 1973928136}
