@@ -52,6 +52,21 @@ public class GestorMechones : MonoBehaviour
     [Tooltip("Con 'zona entera': qué parte de la zona hay que tapar para llegar a 0% (0.85 = el 85%)")]
     [Range(0.3f, 1f)] public float fraccionParaCompletar = 0.85f;
     float porcentajeBaseZona;
+
+    [Header("Cálculo del % (recomendado)")]
+    [Tooltip("Alopecia = parte del cuero cabelludo que no tapa nada. El peinado tapa como los mechones (más pelo = menos % al empezar). Cada mechón resta lo mismo si cae sobre calva. Ignora la zona objetivo.")]
+    public bool calculoSimple = true;
+    [Tooltip("Multiplica la alopecia de este nivel (1 = normal). Más alto = empieza más alto y cada mechón resta menos en proporción.")]
+    public float factorDificultad = 1f;
+    [Tooltip("Por debajo de esta altura (medida en el Busto) no es cuero cabelludo: cara y cuello")]
+    public float alturaMinimaCuero = 1.3f;
+    [Tooltip("Orejas: por encima de esta altura y más a los lados que 'anchoOrejas' (medido en el Busto)")]
+    public float alturaOrejas = 1.85f;
+    public float anchoOrejas = 0.3f;
+    [Tooltip("Huecos sin pelo con menos puntos que esto cuentan como pelo (los huequitos entre mechones del peinado no se ven)")]
+    public int puntosMinimosHueco = 8;
+    [Tooltip("Distancia (m) para considerar que dos puntos sin pelo son del mismo hueco")]
+    public float distanciaHueco = 0.09f;
     [Tooltip("Hasta qué altura sobre la piel se busca pelo del peinado (metros)")]
     public float alcancePeinado = 0.5f;
     [Tooltip("Apertura (grados) de los rayos inclinados: más = el pelo tapa más alrededor")]
@@ -170,18 +185,21 @@ public class GestorMechones : MonoBehaviour
 
     void MoverArrastrado(Ray rayo)
     {
-        if (pegarSobrePeloEnZona && HayZonaObjetivo() && PegarSobrePelo(rayo)) return;
+        if (!calculoSimple && pegarSobrePeloEnZona && HayZonaObjetivo() && PegarSobrePelo(rayo)) return;
         if (colliderCabeza && colliderCabeza.Raycast(rayo, out RaycastHit hit, 100f))
         {
             // no se puede pegar fuera del cuero cabelludo (cara, orejas, cuerpo) ni sobre el peinado
-            bool fueraDeZona = HayZonaObjetivo()
+            bool fueraDeZona = calculoSimple ? !EsCueroValido(hit.point, true)   // solo en el cuero cabelludo (no orejas, cara ni cuello)
+                : HayZonaObjetivo()
                 ? !DentroZonaObjetivo(hit.point, margenZona)          // solo dentro de la zona objetivo del nivel (con margen)
                 : (soloEnCueroCabelludo && hit.triangleIndex >= 0 && triFinCalva > 0 &&
                    (hit.triangleIndex < triInicioCalva || hit.triangleIndex >= triFinCalva) &&
                    !CercaDelCueroCabelludo(hit.point));
+            // (cálculo simple: solo bloquea el pelo que está DELANTE del ratón, no el que sobresale por encima del punto)
             bool sobrePelo = bloqueoEstricto
                 ? (HayPeloCerca(hit.point) || PeinadoEncima(hit.point, hit.normal))
                 : TocaPeinado(hit.point + hit.normal * 0.003f, hit.normal);   // solo si hay pelo justo encima
+            if (calculoSimple) sobrePelo = PeloDelante(rayo, hit.distance);  // si clicas piel que se ve, se pega; si clicas pelo, no
             bool bloqueado = fueraDeZona || sobrePelo;
             arrastrado.sobreCabeza = !bloqueado;          // sobre un pelo: no se pega (al soltar vuelve al contador)
             arrastrado.puntoSuperficie = hit.point;
@@ -303,6 +321,7 @@ public class GestorMechones : MonoBehaviour
         normalesLocales = normalesLista.ToArray();
         CalcularPeinado();
         CalcularZona();
+        CalcularValidos();
         if (malla != null && submallaCalva < malla.subMeshCount)
         {
             var sm = malla.GetSubMesh(submallaCalva);
@@ -442,8 +461,76 @@ public class GestorMechones : MonoBehaviour
             float frac = tapadas / (float)totalEnZona / Mathf.Max(0.01f, fraccionParaCompletar);   // tapando esa fracción ya es 0%
             PorcentajeCalvicie = porcentajeBaseZona * Mathf.Clamp01(1f - frac);
         }
+        if (calculoSimple && valido != null && totalValidos > 0 && tc != null)
+        {
+            // alopecia = parte del cuero cabelludo que no tapa nada (ni peinado, ni mechones, ni manchas)
+            int calvas = 0;
+            for (int i = 0; i < muestrasLocales.Length; i++)
+            {
+                if (!valido[i]) continue;
+                if (cubiertoPorPeinado != null && i < cubiertoPorPeinado.Length && cubiertoPorPeinado[i]) continue;
+                if (Cubierto(tc.TransformPoint(muestrasLocales[i]))) continue;
+                calvas++;
+            }
+            PorcentajeCalvicie = Mathf.Min(100f, 100f * calvas / totalValidos * factorDificultad);
+        }
         MechonesDisponibles = Mathf.Max(0, numeroMechones - mechones.Count);
         ActualizarUI();
+    }
+
+    // ---------- Cálculo simple: cuero cabelludo ----------
+    bool[] valido;
+    int totalValidos;
+
+    /// ¿Hay pelo del peinado entre el ratón y la piel? (el jugador está clicando pelo)
+    bool PeloDelante(Ray rayo, float distanciaPiel)
+    {
+        foreach (var h in Physics.RaycastAll(rayo, distanciaPiel - 0.005f, ~0, QueryTriggerInteraction.Collide))
+            if (h.collider && h.collider.GetComponentInParent<PeloBloqueo>()) return true;
+        return false;
+    }
+
+    /// ¿Es este punto cuero cabelludo de verdad? (no cara/cuello, no orejas, y cerca de la zona de pelo)
+    bool EsCueroValido(Vector3 p, bool comprobarCercania)
+    {
+        Transform refT = colliderCabeza && colliderCabeza.transform.parent ? colliderCabeza.transform.parent : transform;
+        Vector3 l = refT.InverseTransformPoint(p);
+        if (l.y < alturaMinimaCuero) return false;
+        if (l.y > alturaOrejas && Mathf.Abs(l.x) > anchoOrejas) return false;
+        return !comprobarCercania || CercaDelCueroCabelludo(p);
+    }
+
+    /// Los huecos sin pelo más pequeños que 'puntosMinimosHueco' cuentan como tapados por el peinado.
+    void RellenarHuequitos()
+    {
+        if (cubiertoPorPeinado == null || valido == null || !mallaCabeza) return;
+        var tr = mallaCabeza.transform;
+        var idx = new List<int>(); var pos = new List<Vector3>();
+        for (int i = 0; i < muestrasLocales.Length; i++)
+            if (valido[i] && !cubiertoPorPeinado[i]) { idx.Add(i); pos.Add(tr.TransformPoint(muestrasLocales[i])); }
+        int m = idx.Count; var padre = new int[m];
+        for (int i = 0; i < m; i++) padre[i] = i;
+        System.Func<int, int> raiz = null;
+        raiz = x => padre[x] == x ? x : (padre[x] = raiz(padre[x]));
+        float d2 = distanciaHueco * distanciaHueco;
+        for (int a = 0; a < m; a++)
+            for (int b = a + 1; b < m; b++)
+                if ((pos[a] - pos[b]).sqrMagnitude < d2) { int ra = raiz(a), rb = raiz(b); if (ra != rb) padre[ra] = rb; }
+        var tam = new Dictionary<int, int>();
+        for (int i = 0; i < m; i++) { int r = raiz(i); tam[r] = tam.TryGetValue(r, out int c) ? c + 1 : 1; }
+        for (int i = 0; i < m; i++)
+            if (tam[raiz(i)] < puntosMinimosHueco) cubiertoPorPeinado[idx[i]] = true;   // huequito: no se ve, cuenta como pelo
+    }
+
+    void CalcularValidos()
+    {
+        valido = null; totalValidos = 0;
+        if (!mallaCabeza) return;
+        var tr = mallaCabeza.transform;
+        valido = new bool[muestrasLocales.Length];
+        for (int i = 0; i < muestrasLocales.Length; i++)
+            if (EsCueroValido(tr.TransformPoint(muestrasLocales[i]), false)) { valido[i] = true; totalValidos++; }
+        RellenarHuequitos();
     }
 
     bool Cubierto(Vector3 w)

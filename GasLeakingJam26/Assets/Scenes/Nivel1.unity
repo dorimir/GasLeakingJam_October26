@@ -951,7 +951,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9, g: 0.3, b: 0.25, a: 1}
+  m_Color: {r: 0.36621392, g: 0.7448217, b: 0.33896434, a: 1}
   m_RaycastTarget: 0
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -963,7 +963,7 @@ MonoBehaviour:
   m_PreserveAspect: 0
   m_FillCenter: 1
   m_FillMethod: 0
-  m_FillAmount: 1
+  m_FillAmount: 0.11035654
   m_FillClockwise: 1
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
@@ -1500,7 +1500,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &565322567
 Transform:
   m_ObjectHideFlags: 0
@@ -2913,6 +2913,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: -5754084199372789682, guid: e4ad21c0d8f4ef84eab343def8cc261d, type: 3}
+      propertyPath: m_Mesh
+      value: 
+      objectReference: {fileID: 4300000, guid: 0197775e4821400459e539bb607ccad1, type: 2}
     - target: {fileID: 919132149155446097, guid: e4ad21c0d8f4ef84eab343def8cc261d, type: 3}
       propertyPath: m_Name
       value: PeinadoDensoEtapa1
@@ -2975,7 +2979,7 @@ MeshCollider:
   serializedVersion: 5
   m_Convex: 0
   m_CookingOptions: 30
-  m_Mesh: {fileID: -8588260375732262038, guid: e4ad21c0d8f4ef84eab343def8cc261d, type: 3}
+  m_Mesh: {fileID: 4300000, guid: 0197775e4821400459e539bb607ccad1, type: 2}
 --- !u!1 &957152755
 GameObject:
   m_ObjectHideFlags: 0
@@ -4073,7 +4077,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: x 0
+  m_Text: x 8
 --- !u!222 &1253432210
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -5212,7 +5216,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: 100%
+  m_Text: 11%
 --- !u!1 &1642278450
 GameObject:
   m_ObjectHideFlags: 0
@@ -6358,7 +6362,7 @@ MonoBehaviour:
   numeroMechones: 8
   prefabMechon: {fileID: 8168713802554486646, guid: ab8fca6e2335061438e24c5a8425efca, type: 3}
   radioCobertura: 0.13
-  multiplicadorCobertura: 1.2
+  multiplicadorCobertura: 1.5
   separacionSuperficie: 0.01
   colliderCabeza: {fileID: 1240881465}
   mallaCabeza: {fileID: 1240881463}
@@ -6369,12 +6373,19 @@ MonoBehaviour:
   radioBloqueo: 0.09
   soloEnCueroCabelludo: 1
   bloqueoEstricto: 0
-  margenZona: 0.06
+  margenZona: 0.08
   zonaObjetivo: {fileID: 565322567}
   pegarSobrePeloEnZona: 1
-  zonaEnteraCuenta: 1
-  porcentajeInicialZona: 37
-  fraccionParaCompletar: 0.65
+  zonaEnteraCuenta: 0
+  porcentajeInicialZona: -1
+  fraccionParaCompletar: 1
+  calculoSimple: 1
+  factorDificultad: 1
+  alturaMinimaCuero: 1.3
+  alturaOrejas: 1.85
+  anchoOrejas: 0.3
+  puntosMinimosHueco: 12
+  distanciaHueco: 0.09
   alcancePeinado: 0.5
   aperturaPeinado: 30
   rellenoBarra: {fileID: 484785803}

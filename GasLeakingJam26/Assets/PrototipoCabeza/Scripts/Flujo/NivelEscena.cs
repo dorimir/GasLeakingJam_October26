@@ -4,7 +4,7 @@ using UnityEngine;
 [DefaultExecutionOrder(-600)]
 public class NivelEscena : MonoBehaviour
 {
-    [Range(1, 4)] public int nivel = 1;
+    [Range(1, 5)] public int nivel = 1;
 
     void Awake()
     {

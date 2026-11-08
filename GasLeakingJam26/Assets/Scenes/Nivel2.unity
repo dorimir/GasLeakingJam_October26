@@ -1469,7 +1469,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &565322567
 Transform:
   m_ObjectHideFlags: 0
@@ -6358,7 +6358,7 @@ MonoBehaviour:
   numeroMechones: 8
   prefabMechon: {fileID: 8168713802554486646, guid: ab8fca6e2335061438e24c5a8425efca, type: 3}
   radioCobertura: 0.13
-  multiplicadorCobertura: 3
+  multiplicadorCobertura: 1.5
   separacionSuperficie: 0.01
   colliderCabeza: {fileID: 1240881465}
   mallaCabeza: {fileID: 1240881463}
@@ -6371,6 +6371,17 @@ MonoBehaviour:
   bloqueoEstricto: 0
   margenZona: 0.08
   zonaObjetivo: {fileID: 565322567}
+  pegarSobrePeloEnZona: 1
+  zonaEnteraCuenta: 0
+  porcentajeInicialZona: -1
+  fraccionParaCompletar: 1
+  calculoSimple: 1
+  factorDificultad: 1
+  alturaMinimaCuero: 1.3
+  alturaOrejas: 1.85
+  anchoOrejas: 0.3
+  puntosMinimosHueco: 12
+  distanciaHueco: 0.09
   alcancePeinado: 0.5
   aperturaPeinado: 30
   rellenoBarra: {fileID: 484785803}

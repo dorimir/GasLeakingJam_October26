@@ -12,10 +12,10 @@ public static class ResultadoPartida
     public static GameObject busto;
 
     // ---------- Niveles ----------
-    /// Niveles 1..4 se juegan en la escena de niveles; el 5 es el nivel final.
-    public const int nivelesNormales = 4;
+    /// Niveles 1..5 se juegan en sus escenas (Nivel1..Nivel5); después va el nivel final (afeitado).
+    public const int nivelesNormales = 5;
     public const string escenaNiveles = "PrototipoCabeza";   // escena de pruebas (todas las etapas)
-    /// Cada nivel 1..4 tiene su propia escena: Nivel1, Nivel2, Nivel3, Nivel4.
+    /// Cada nivel 1..5 tiene su propia escena: Nivel1 … Nivel5.
     public static string EscenaNivel(int n) { return "Nivel" + n; }
     public const string escenaFinal = "NivelFinal";
     /// Nivel que se está jugando (1..5).
