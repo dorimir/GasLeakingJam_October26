@@ -285,6 +285,7 @@ GameObject:
   m_Component:
   - component: {fileID: 236805739}
   - component: {fileID: 236805738}
+  - component: {fileID: 236805740}
   m_Layer: 0
   m_Name: Luz Principal
   m_TagString: Untagged
@@ -302,8 +303,8 @@ Light:
   m_Enabled: 1
   serializedVersion: 12
   m_Type: 1
-  m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_Intensity: 1.1
+  m_Color: {r: 1, g: 0.9896957, b: 0.8726415, a: 1}
+  m_Intensity: 1
   m_Range: 10
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
@@ -365,13 +366,42 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 236805737}
   serializedVersion: 2
-  m_LocalRotation: {x: 0.3303661, y: -0.24321036, z: 0.08852133, w: 0.9076734}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: 0.26336795, y: -0.9047839, z: 0.28380406, w: 0.17736574}
+  m_LocalPosition: {x: 1.28, y: 2.15, z: -2.22}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 37.372, y: -167.54, z: -28.23}
+--- !u!114 &236805740
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 236805737}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!1 &501368133
 GameObject:
   m_ObjectHideFlags: 0
@@ -556,7 +586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c18a02f94f6f974fbc6e127f8c32d6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FondoCamara
-  imagen: {fileID: 2800000, guid: 8bfd9884c762e304692bcb19912bf24d, type: 3}
+  imagen: {fileID: 2800000, guid: 596728d75384f2f4997ba453fa91d755, type: 3}
   distancia: 20
   tinte: {r: 1, g: 1, b: 1, a: 1}
   materialBase: {fileID: 2100000, guid: f4c854d46008c9e4ab59e20917868324, type: 2}
@@ -670,7 +700,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 1}
   m_AnchorMax: {x: 0.5, y: 1}
-  m_AnchoredPosition: {x: -109, y: -53}
+  m_AnchoredPosition: {x: -110, y: -50}
   m_SizeDelta: {x: 92.0085, y: 60}
   m_Pivot: {x: 0.5, y: 1}
 --- !u!114 &905709982
@@ -913,6 +943,81 @@ Transform:
   - {fileID: 1253981264}
   m_Father: {fileID: 1833948261}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1580003068
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1580003069}
+  - component: {fileID: 1580003071}
+  - component: {fileID: 1580003070}
+  m_Layer: 0
+  m_Name: bg
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1580003069
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580003068}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 0.04, y: 0.04, z: 0.04}
+  m_ConstrainProportionsScale: 1
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 1919.9999, y: 1079.6353}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1580003070
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580003068}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
+  m_Material: {fileID: 0}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_RaycastTarget: 1
+  m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
+  m_Maskable: 1
+  m_OnCullStateChanged:
+    m_PersistentCalls:
+      m_Calls: []
+  m_Sprite: {fileID: 21300000, guid: 596728d75384f2f4997ba453fa91d755, type: 3}
+  m_Type: 0
+  m_PreserveAspect: 0
+  m_FillCenter: 1
+  m_FillMethod: 4
+  m_FillAmount: 1
+  m_FillClockwise: 1
+  m_FillOrigin: 0
+  m_UseSpriteMesh: 0
+  m_PixelsPerUnitMultiplier: 1
+--- !u!222 &1580003071
+CanvasRenderer:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1580003068}
+  m_CullTransparentMesh: 1
 --- !u!1 &1800212470
 GameObject:
   m_ObjectHideFlags: 0
@@ -1151,6 +1256,7 @@ GameObject:
   - component: {fileID: 1845962294}
   - component: {fileID: 1845962293}
   - component: {fileID: 1845962292}
+  - component: {fileID: 1845962295}
   m_Layer: 0
   m_Name: BotonContinuar
   m_TagString: Untagged
@@ -1271,6 +1377,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1845962290}
   m_CullTransparentMesh: 1
+--- !u!114 &1845962295
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1845962290}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b01abba69a07d40854b6e77e1b9871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimacionBoton
+  objetivo: {fileID: 0}
+  escalaEnfoque: 1.1
+  escalaPulsado: 0.94
+  velocidad: 14
+  latido: 0
+  amplitudLatido: 0.1
+  frecuenciaLatido: 1.2
+  pararLatidoAlPulsar: 1
 --- !u!1 &1935374643
 GameObject:
   m_ObjectHideFlags: 0
@@ -1370,7 +1496,7 @@ Canvas:
   m_OverridePixelPerfect: 0
   m_SortingBucketNormalizedSize: 0
   m_VertexColorAlwaysGammaSpace: 0
-  m_AdditionalShaderChannelsFlag: 0
+  m_AdditionalShaderChannelsFlag: 25
   m_UpdateRectTransformForStandalone: 0
   m_SortingLayerID: 0
   m_SortingOrder: 0
@@ -1492,5 +1618,6 @@ SceneRoots:
   m_Roots:
   - {fileID: 236805739}
   - {fileID: 501368139}
+  - {fileID: 1580003069}
   - {fileID: 1935374648}
   - {fileID: 98627234}

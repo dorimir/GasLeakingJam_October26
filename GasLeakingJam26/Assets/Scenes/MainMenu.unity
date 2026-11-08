@@ -132,6 +132,7 @@ GameObject:
   - component: {fileID: 418719590}
   - component: {fileID: 418719589}
   - component: {fileID: 418719592}
+  - component: {fileID: 418719593}
   m_Layer: 5
   m_Name: Jugar_b
   m_TagString: Untagged
@@ -269,6 +270,26 @@ MonoBehaviour:
   hoverVolume: 0.5
   clickVolume: 0.03
   sharedAudioSource: {fileID: 0}
+--- !u!114 &418719593
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 418719587}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b01abba69a07d40854b6e77e1b9871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimacionBoton
+  objetivo: {fileID: 0}
+  escalaEnfoque: 1.1
+  escalaPulsado: 0.94
+  velocidad: 14
+  latido: 0
+  amplitudLatido: 0.1
+  frecuenciaLatido: 1.2
+  pararLatidoAlPulsar: 1
 --- !u!1 &590507534
 GameObject:
   m_ObjectHideFlags: 0
@@ -320,7 +341,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &637397943
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -604,6 +625,7 @@ GameObject:
   - component: {fileID: 723623326}
   - component: {fileID: 723623325}
   - component: {fileID: 723623324}
+  - component: {fileID: 723623327}
   m_Layer: 5
   m_Name: Creditos_b (1)
   m_TagString: Untagged
@@ -724,6 +746,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 723623322}
   m_CullTransparentMesh: 1
+--- !u!114 &723623327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 723623322}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b01abba69a07d40854b6e77e1b9871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimacionBoton
+  objetivo: {fileID: 0}
+  escalaEnfoque: 1.1
+  escalaPulsado: 0.94
+  velocidad: 14
+  latido: 0
+  amplitudLatido: 0.1
+  frecuenciaLatido: 1.2
+  pararLatidoAlPulsar: 1
 --- !u!1 &764826419
 GameObject:
   m_ObjectHideFlags: 0
@@ -1046,6 +1088,7 @@ GameObject:
   - component: {fileID: 1347347427}
   - component: {fileID: 1347347426}
   - component: {fileID: 1347347429}
+  - component: {fileID: 1347347430}
   m_Layer: 5
   m_Name: Creditos_b
   m_TagString: Untagged
@@ -1183,6 +1226,26 @@ MonoBehaviour:
   hoverVolume: 0.5
   clickVolume: 0.03
   sharedAudioSource: {fileID: 0}
+--- !u!114 &1347347430
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1347347424}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b01abba69a07d40854b6e77e1b9871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimacionBoton
+  objetivo: {fileID: 0}
+  escalaEnfoque: 1.1
+  escalaPulsado: 0.94
+  velocidad: 14
+  latido: 0
+  amplitudLatido: 0.1
+  frecuenciaLatido: 1.2
+  pararLatidoAlPulsar: 1
 --- !u!1 &1370325433
 GameObject:
   m_ObjectHideFlags: 0
@@ -1433,6 +1496,7 @@ GameObject:
   - component: {fileID: 2073996135}
   - component: {fileID: 2073996134}
   - component: {fileID: 2073996137}
+  - component: {fileID: 2073996138}
   m_Layer: 5
   m_Name: Salir_b
   m_TagString: Untagged
@@ -1570,6 +1634,26 @@ MonoBehaviour:
   hoverVolume: 0.5
   clickVolume: 0.03
   sharedAudioSource: {fileID: 0}
+--- !u!114 &2073996138
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2073996132}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b01abba69a07d40854b6e77e1b9871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimacionBoton
+  objetivo: {fileID: 0}
+  escalaEnfoque: 1.1
+  escalaPulsado: 0.94
+  velocidad: 14
+  latido: 0
+  amplitudLatido: 0.1
+  frecuenciaLatido: 1.2
+  pararLatidoAlPulsar: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

@@ -461,6 +461,7 @@ GameObject:
   - component: {fileID: 339922541}
   - component: {fileID: 339922542}
   - component: {fileID: 339922540}
+  - component: {fileID: 339922543}
   m_Layer: 0
   m_Name: BotonPeine
   m_TagString: Untagged
@@ -582,6 +583,26 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &339922543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339922538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b01abba69a07d40854b6e77e1b9871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimacionBoton
+  objetivo: {fileID: 0}
+  escalaEnfoque: 1.1
+  escalaPulsado: 0.94
+  velocidad: 14
+  latido: 0
+  amplitudLatido: 0.1
+  frecuenciaLatido: 1.2
+  pararLatidoAlPulsar: 1
 --- !u!1 &354201002
 GameObject:
   m_ObjectHideFlags: 0
@@ -698,6 +719,7 @@ GameObject:
   - component: {fileID: 439080945}
   - component: {fileID: 439080944}
   - component: {fileID: 439080943}
+  - component: {fileID: 439080946}
   m_Layer: 0
   m_Name: BotonListo
   m_TagString: Untagged
@@ -818,6 +840,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 439080941}
   m_CullTransparentMesh: 1
+--- !u!114 &439080946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 439080941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b01abba69a07d40854b6e77e1b9871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimacionBoton
+  objetivo: {fileID: 0}
+  escalaEnfoque: 1.1
+  escalaPulsado: 0.94
+  velocidad: 14
+  latido: 0
+  amplitudLatido: 0.1
+  frecuenciaLatido: 1.2
+  pararLatidoAlPulsar: 1
 --- !u!1 &457632414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1623,6 +1665,7 @@ GameObject:
   - component: {fileID: 610876815}
   - component: {fileID: 610876813}
   - component: {fileID: 610876816}
+  - component: {fileID: 610876817}
   m_Layer: 0
   m_Name: Maquinilla
   m_TagString: Untagged
@@ -1717,6 +1760,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TooltipHerramienta
   tooltip: {fileID: 826728314}
   duracionAparicion: 0.08
+--- !u!114 &610876817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610876811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b01abba69a07d40854b6e77e1b9871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimacionBoton
+  objetivo: {fileID: 0}
+  escalaEnfoque: 1.1
+  escalaPulsado: 0.94
+  velocidad: 14
+  latido: 0
+  amplitudLatido: 0.1
+  frecuenciaLatido: 1.2
+  pararLatidoAlPulsar: 1
 --- !u!1 &614274805
 GameObject:
   m_ObjectHideFlags: 0
@@ -2022,6 +2085,7 @@ GameObject:
   - component: {fileID: 770796466}
   - component: {fileID: 770796464}
   - component: {fileID: 770796467}
+  - component: {fileID: 770796468}
   m_Layer: 0
   m_Name: Grafitti
   m_TagString: Untagged
@@ -2129,6 +2193,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TooltipHerramienta
   tooltip: {fileID: 1033354357}
   duracionAparicion: 0.08
+--- !u!114 &770796468
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770796462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b01abba69a07d40854b6e77e1b9871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimacionBoton
+  objetivo: {fileID: 0}
+  escalaEnfoque: 1.1
+  escalaPulsado: 0.94
+  velocidad: 14
+  latido: 0
+  amplitudLatido: 0.1
+  frecuenciaLatido: 1.2
+  pararLatidoAlPulsar: 1
 --- !u!1 &791138733
 GameObject:
   m_ObjectHideFlags: 0
@@ -2300,6 +2384,7 @@ GameObject:
   - component: {fileID: 843157946}
   - component: {fileID: 843157950}
   - component: {fileID: 843157949}
+  - component: {fileID: 843157951}
   m_Layer: 0
   m_Name: "Mech\xF3n"
   m_TagString: Untagged
@@ -2437,6 +2522,26 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PanelMechonesUI
   gestor: {fileID: 1993137297}
+--- !u!114 &843157951
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843157944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b01abba69a07d40854b6e77e1b9871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimacionBoton
+  objetivo: {fileID: 0}
+  escalaEnfoque: 1.1
+  escalaPulsado: 0.94
+  velocidad: 14
+  latido: 0
+  amplitudLatido: 0.1
+  frecuenciaLatido: 1.2
+  pararLatidoAlPulsar: 1
 --- !u!1 &882737335
 GameObject:
   m_ObjectHideFlags: 0
@@ -3071,6 +3176,7 @@ GameObject:
   - component: {fileID: 996177584}
   - component: {fileID: 996177582}
   - component: {fileID: 996177585}
+  - component: {fileID: 996177586}
   m_Layer: 0
   m_Name: Pastillas
   m_TagString: Untagged
@@ -3165,6 +3271,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TooltipHerramienta
   tooltip: {fileID: 1893996796}
   duracionAparicion: 0.08
+--- !u!114 &996177586
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996177580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b01abba69a07d40854b6e77e1b9871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimacionBoton
+  objetivo: {fileID: 0}
+  escalaEnfoque: 1.1
+  escalaPulsado: 0.94
+  velocidad: 14
+  latido: 0
+  amplitudLatido: 0.1
+  frecuenciaLatido: 1.2
+  pararLatidoAlPulsar: 1
 --- !u!1 &1031203474
 GameObject:
   m_ObjectHideFlags: 0
@@ -3424,6 +3550,7 @@ GameObject:
   - component: {fileID: 1079160829}
   - component: {fileID: 1079160827}
   - component: {fileID: 1079160830}
+  - component: {fileID: 1079160831}
   m_Layer: 0
   m_Name: Peine
   m_TagString: Untagged
@@ -3530,6 +3657,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::TooltipHerramienta
   tooltip: {fileID: 1886801864}
   duracionAparicion: 0.08
+--- !u!114 &1079160831
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079160825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b01abba69a07d40854b6e77e1b9871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimacionBoton
+  objetivo: {fileID: 0}
+  escalaEnfoque: 1.1
+  escalaPulsado: 0.94
+  velocidad: 14
+  latido: 0
+  amplitudLatido: 0.1
+  frecuenciaLatido: 1.2
+  pararLatidoAlPulsar: 1
 --- !u!1 &1091532147
 GameObject:
   m_ObjectHideFlags: 0
@@ -6369,6 +6516,7 @@ GameObject:
   - component: {fileID: 2125803568}
   - component: {fileID: 2125803567}
   - component: {fileID: 2125803566}
+  - component: {fileID: 2125803570}
   m_Layer: 0
   m_Name: BotonNivelFinal
   m_TagString: Untagged
@@ -6503,6 +6651,26 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2125803564}
   m_CullTransparentMesh: 1
+--- !u!114 &2125803570
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125803564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 10b01abba69a07d40854b6e77e1b9871, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AnimacionBoton
+  objetivo: {fileID: 0}
+  escalaEnfoque: 1.1
+  escalaPulsado: 0.94
+  velocidad: 14
+  latido: 0
+  amplitudLatido: 0.1
+  frecuenciaLatido: 1.2
+  pararLatidoAlPulsar: 1
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
