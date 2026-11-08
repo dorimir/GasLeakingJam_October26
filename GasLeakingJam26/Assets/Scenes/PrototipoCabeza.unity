@@ -507,6 +507,7 @@ GameObject:
   - component: {fileID: 339922542}
   - component: {fileID: 339922540}
   - component: {fileID: 339922543}
+  - component: {fileID: 339922544}
   m_Layer: 0
   m_Name: BotonPeine
   m_TagString: Untagged
@@ -648,6 +649,23 @@ MonoBehaviour:
   amplitudLatido: 0.1
   frecuenciaLatido: 1.2
   pararLatidoAlPulsar: 1
+--- !u!114 &339922544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339922538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1 &354201002
 GameObject:
   m_ObjectHideFlags: 0
@@ -734,6 +752,7 @@ GameObject:
   - component: {fileID: 439080944}
   - component: {fileID: 439080943}
   - component: {fileID: 439080946}
+  - component: {fileID: 439080947}
   m_Layer: 0
   m_Name: BotonListo
   m_TagString: Untagged
@@ -874,6 +893,23 @@ MonoBehaviour:
   amplitudLatido: 0.1
   frecuenciaLatido: 1.2
   pararLatidoAlPulsar: 1
+--- !u!114 &439080947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 439080941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1 &457632414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1648,6 +1684,7 @@ GameObject:
   - component: {fileID: 610876813}
   - component: {fileID: 610876816}
   - component: {fileID: 610876817}
+  - component: {fileID: 610876818}
   m_Layer: 0
   m_Name: Maquinilla
   m_TagString: Untagged
@@ -1762,6 +1799,23 @@ MonoBehaviour:
   amplitudLatido: 0.1
   frecuenciaLatido: 1.2
   pararLatidoAlPulsar: 1
+--- !u!114 &610876818
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 610876811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1 &614274805
 GameObject:
   m_ObjectHideFlags: 0
@@ -2068,6 +2122,7 @@ GameObject:
   - component: {fileID: 770796464}
   - component: {fileID: 770796467}
   - component: {fileID: 770796468}
+  - component: {fileID: 770796469}
   m_Layer: 0
   m_Name: Grafitti
   m_TagString: Untagged
@@ -2195,6 +2250,23 @@ MonoBehaviour:
   amplitudLatido: 0.1
   frecuenciaLatido: 1.2
   pararLatidoAlPulsar: 1
+--- !u!114 &770796469
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 770796462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1 &791138733
 GameObject:
   m_ObjectHideFlags: 0
@@ -2367,6 +2439,7 @@ GameObject:
   - component: {fileID: 843157950}
   - component: {fileID: 843157949}
   - component: {fileID: 843157951}
+  - component: {fileID: 843157952}
   m_Layer: 0
   m_Name: "Mech\xF3n"
   m_TagString: Untagged
@@ -2524,6 +2597,23 @@ MonoBehaviour:
   amplitudLatido: 0.1
   frecuenciaLatido: 1.2
   pararLatidoAlPulsar: 1
+--- !u!114 &843157952
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 843157944}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1001 &879717288
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3279,6 +3369,7 @@ GameObject:
   - component: {fileID: 996177585}
   - component: {fileID: 996177586}
   - component: {fileID: 996177587}
+  - component: {fileID: 996177588}
   m_Layer: 0
   m_Name: Pastillas
   m_TagString: Untagged
@@ -3417,6 +3508,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 53d6036310070604dbee097a4cb623f7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::BotonPastilla
+--- !u!114 &996177588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 996177580}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1 &1031203474
 GameObject:
   m_ObjectHideFlags: 0
@@ -3677,6 +3785,7 @@ GameObject:
   - component: {fileID: 1079160827}
   - component: {fileID: 1079160830}
   - component: {fileID: 1079160831}
+  - component: {fileID: 1079160832}
   m_Layer: 0
   m_Name: Peine
   m_TagString: Untagged
@@ -3803,6 +3912,23 @@ MonoBehaviour:
   amplitudLatido: 0.1
   frecuenciaLatido: 1.2
   pararLatidoAlPulsar: 1
+--- !u!114 &1079160832
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1079160825}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1 &1091532147
 GameObject:
   m_ObjectHideFlags: 0
@@ -6701,6 +6827,7 @@ GameObject:
   - component: {fileID: 2125803567}
   - component: {fileID: 2125803566}
   - component: {fileID: 2125803570}
+  - component: {fileID: 2125803571}
   m_Layer: 0
   m_Name: BotonNivelFinal
   m_TagString: Untagged
@@ -6855,6 +6982,23 @@ MonoBehaviour:
   amplitudLatido: 0.1
   frecuenciaLatido: 1.2
   pararLatidoAlPulsar: 1
+--- !u!114 &2125803571
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2125803564}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1001 &2141467166
 PrefabInstance:
   m_ObjectHideFlags: 0

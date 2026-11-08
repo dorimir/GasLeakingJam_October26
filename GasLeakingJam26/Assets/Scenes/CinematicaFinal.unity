@@ -261,7 +261,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3703941339648029169, guid: 91f49feb6e30a394094668a39a8c9615, type: 3}
       propertyPath: 'lines.Array.data[2]'
-      value: 'Es lo que hay. '
+      value: "JODER, QUE S\xCD, \xA1ESTOY CALVO!"
       objectReference: {fileID: 0}
     - target: {fileID: 7454362460306713950, guid: 91f49feb6e30a394094668a39a8c9615, type: 3}
       propertyPath: m_Name
@@ -629,6 +629,7 @@ GameObject:
   - component: {fileID: 1084876290}
   - component: {fileID: 1084876289}
   - component: {fileID: 1084876292}
+  - component: {fileID: 1084876293}
   m_Layer: 0
   m_Name: BotonVolverAProbar
   m_TagString: Untagged
@@ -769,6 +770,23 @@ MonoBehaviour:
   amplitudLatido: 0.1
   frecuenciaLatido: 1.2
   pararLatidoAlPulsar: 1
+--- !u!114 &1084876293
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1084876287}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1 &1350727618
 GameObject:
   m_ObjectHideFlags: 0

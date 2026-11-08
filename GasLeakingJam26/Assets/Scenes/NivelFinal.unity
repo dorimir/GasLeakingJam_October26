@@ -637,6 +637,7 @@ GameObject:
   - component: {fileID: 339922542}
   - component: {fileID: 339922540}
   - component: {fileID: 339922543}
+  - component: {fileID: 339922544}
   m_Layer: 0
   m_Name: BotonPeine
   m_TagString: Untagged
@@ -778,6 +779,23 @@ MonoBehaviour:
   amplitudLatido: 0.1
   frecuenciaLatido: 1.2
   pararLatidoAlPulsar: 1
+--- !u!114 &339922544
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 339922538}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1 &385449651
 GameObject:
   m_ObjectHideFlags: 0
@@ -892,6 +910,7 @@ GameObject:
   - component: {fileID: 439080944}
   - component: {fileID: 439080943}
   - component: {fileID: 439080946}
+  - component: {fileID: 439080947}
   m_Layer: 0
   m_Name: BotonListo
   m_TagString: Untagged
@@ -1033,6 +1052,23 @@ MonoBehaviour:
   amplitudLatido: 0.1
   frecuenciaLatido: 1.2
   pararLatidoAlPulsar: 1
+--- !u!114 &439080947
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 439080941}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1 &457632414
 GameObject:
   m_ObjectHideFlags: 0
@@ -1602,6 +1638,7 @@ GameObject:
   - component: {fileID: 531469297}
   - component: {fileID: 531469299}
   - component: {fileID: 531469300}
+  - component: {fileID: 531469301}
   m_Layer: 0
   m_Name: Maquinilla
   m_TagString: Untagged
@@ -1728,6 +1765,23 @@ MonoBehaviour:
   amplitudLatido: 0.12
   frecuenciaLatido: 1.2
   pararLatidoAlPulsar: 1
+--- !u!114 &531469301
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 531469295}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1 &541042401
 GameObject:
   m_ObjectHideFlags: 0
@@ -4892,6 +4946,7 @@ GameObject:
   - component: {fileID: 1997975054}
   - component: {fileID: 1997975053}
   - component: {fileID: 1997975056}
+  - component: {fileID: 1997975057}
   m_Layer: 0
   m_Name: BotonRestaurarVista
   m_TagString: Untagged
@@ -5033,6 +5088,23 @@ MonoBehaviour:
   amplitudLatido: 0.1
   frecuenciaLatido: 1.2
   pararLatidoAlPulsar: 1
+--- !u!114 &1997975057
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1997975051}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 39b556cdb1795b24b88a986f49648296, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ButtonSound
+  hoverClip: {fileID: 0}
+  clickClip: {fileID: 8300000, guid: e1058761fd0b5274f8d83186f9f90da1, type: 3}
+  hoverVolume: 0.5
+  clickVolume: 0.03
+  sharedAudioSource: {fileID: 0}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
