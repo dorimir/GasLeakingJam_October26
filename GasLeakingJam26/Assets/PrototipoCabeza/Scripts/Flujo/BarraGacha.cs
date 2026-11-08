@@ -30,6 +30,35 @@ public class BarraGacha : MonoBehaviour
     public Color colorLibre = new Color(0.05f, 0.97f, 0.33f);
 
     public bool Terminado { get; private set; }
+
+    [Header("Sprite de resultado")]
+    [Tooltip("Imagen que aparece al pararse la barra (en su sitio ya colocado)")]
+    public Image imagenResultado;
+    public Sprite spriteGanaste;
+    public Sprite spritePerdiste;
+    public float duracionAparicion = 0.4f;
+
+    IEnumerator MostrarResultado()
+    {
+        imagenResultado.sprite = Pillado ? spritePerdiste : spriteGanaste;
+        var rt = imagenResultado.rectTransform;
+        Vector3 escalaFinal = rt.localScale;
+        Color c = imagenResultado.color; float alfa = c.a;
+        imagenResultado.gameObject.SetActive(true);
+        float t = 0f;
+        while (t < 1f)
+        {
+            t += Time.unscaledDeltaTime / Mathf.Max(0.01f, duracionAparicion);
+            float k = Mathf.Clamp01(t);
+            // crece con un pequeño rebote (sobrepasa y vuelve) y aparece con fundido
+            float s = 1f + 2.7f * Mathf.Pow(k - 1f, 3f) + 1.7f * Mathf.Pow(k - 1f, 2f);
+            rt.localScale = escalaFinal * s;
+            imagenResultado.color = new Color(c.r, c.g, c.b, alfa * Mathf.Clamp01(k * 2f));
+            yield return null;
+        }
+        rt.localScale = escalaFinal;
+        imagenResultado.color = new Color(c.r, c.g, c.b, alfa);
+    }
     public bool Pillado { get; private set; }
 
     void Start()
@@ -37,6 +66,7 @@ public class BarraGacha : MonoBehaviour
         float calvicie = Mathf.Clamp(ResultadoPartida.porcentajeCalvicie, 0f, 100f);
         if (textoPorcentaje) textoPorcentaje.text = $"{Mathf.RoundToInt(calvicie)}%";
         if (textoVeredicto) textoVeredicto.text = "";
+        if (imagenResultado) imagenResultado.gameObject.SetActive(false);   // aparece al pararse la barra
 
         // Zona roja: ancho = probabilidad de que se note, en posición aleatoria
         float ancho = calvicie / 100f;
@@ -74,6 +104,7 @@ public class BarraGacha : MonoBehaviour
         }
         PonerMarcador(destino);
         Terminado = true;
+        if (imagenResultado) StartCoroutine(MostrarResultado());
 
         if (textoVeredicto)
         {

@@ -174,8 +174,9 @@ public class GestorAfeitado : MonoBehaviour
     void ActualizarUI()
     {
         float quedan = Total == 0 ? 0f : Restantes / (float)Total;
-        if (rellenoBarra) rellenoBarra.fillAmount = quedan;
-        if (textoContador) textoContador.text = Restantes == 0 ? textoCompleto : $"Mechones: {Restantes}";
+        // igual que en los niveles: la barra y el texto muestran la alopecia (aquí sube al afeitar, 100% = todo afeitado)
+        if (rellenoBarra) rellenoBarra.fillAmount = PorcentajeAfeitado / 100f;
+        if (textoContador) textoContador.text = $"{Mathf.RoundToInt(PorcentajeAfeitado)}%";
     }
 
     // ---------- Final ----------
