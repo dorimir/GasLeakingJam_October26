@@ -395,7 +395,7 @@ MonoBehaviour:
   - image: {fileID: 21300000, guid: 5ec3ecfe68135784884419fae3d3b3bc, type: 3}
     texts:
     - "\xDAltimamente caigo mejor a todo el mundo. Normal... por fin se han dado
-      cuenta de lo guapo que soy."
+      cuenta de lo guapo que soy, especialmente por mi Pelo-Pantene."
   - image: {fileID: 21300000, guid: d4aab8240adb4e14d87757534379ffd8, type: 3}
     texts:
     - "Mi crush me ha pedido salir hoy. Una semana de planificaci\xF3n, cero margen
@@ -403,7 +403,8 @@ MonoBehaviour:
   - image: {fileID: 21300000, guid: 7251575b9b92f9e43a2cd430a426dff7, type: 3}
     texts:
     - "A ver que tenemos hoy... Arruga nueva... bueno, no pasa nada. \xBFUn grano?
-      Una buena crema y como nuevo. Un momento... \xBFeso es una ENTRADA?"
+      Una buena crema y como nuevo. Un momento... \xBFeso es una ENTRADA? \xBFMI
+      PELO?"
   textSpeed: 0.03
   imageFadeTime: 0.4
   finalFrames:

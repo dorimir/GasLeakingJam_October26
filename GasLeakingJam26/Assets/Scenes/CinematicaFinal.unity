@@ -257,27 +257,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3703941339648029169, guid: 91f49feb6e30a394094668a39a8c9615, type: 3}
       propertyPath: 'lines.Array.data[1]'
-      value: 'No puedo hacer como sino existiera... '
+      value: 'No puedo hacer como si no existiera... '
       objectReference: {fileID: 0}
     - target: {fileID: 3703941339648029169, guid: 91f49feb6e30a394094668a39a8c9615, type: 3}
       propertyPath: 'lines.Array.data[2]'
-      value: Es lo que hay.
+      value: 'Es lo que hay. '
       objectReference: {fileID: 0}
     - target: {fileID: 7454362460306713950, guid: 91f49feb6e30a394094668a39a8c9615, type: 3}
       propertyPath: m_Name
       value: DialogueBox
       objectReference: {fileID: 0}
     - target: {fileID: 7528166991661498858, guid: 91f49feb6e30a394094668a39a8c9615, type: 3}
+      propertyPath: m_Color.a
+      value: 0.64705884
+      objectReference: {fileID: 0}
+    - target: {fileID: 7528166991661498858, guid: 91f49feb6e30a394094668a39a8c9615, type: 3}
       propertyPath: m_Color.b
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7528166991661498858, guid: 91f49feb6e30a394094668a39a8c9615, type: 3}
       propertyPath: m_Color.g
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7528166991661498858, guid: 91f49feb6e30a394094668a39a8c9615, type: 3}
       propertyPath: m_Color.r
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
