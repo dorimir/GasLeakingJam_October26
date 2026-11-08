@@ -14,7 +14,7 @@ namespace Calvo
         public AudioSource source;
         [Tooltip("Segundos desde que empieza el splash hasta que suena este audio.")]
         public float delay = 0f;
-        [Range(0f, 1f)] public float volume = 1f;
+        [Range(0f, 1f)] public float volume = 0.5f;
         [Tooltip("Segundos de fade in. 0 = empieza directamente al volumen indicado.")]
         public float fadeInTime = 0f;
     }
@@ -208,7 +208,7 @@ namespace Calvo
                     yield return null;
                 }
 
-                cue.source.volume = cue.volume;
+                cue.source.volume = cue.volume*0.3f;
             }
 
             // Espera a que termine este audio

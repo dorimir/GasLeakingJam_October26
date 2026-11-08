@@ -586,7 +586,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c18a02f94f6f974fbc6e127f8c32d6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FondoCamara
-  imagen: {fileID: 2800000, guid: 596728d75384f2f4997ba453fa91d755, type: 3}
+  imagen: {fileID: 2800000, guid: a33c5ee7ae2e76c448615602051a4e0c, type: 3}
   distancia: 20
   tinte: {r: 1, g: 1, b: 1, a: 1}
   materialBase: {fileID: 2100000, guid: f4c854d46008c9e4ab59e20917868324, type: 2}
