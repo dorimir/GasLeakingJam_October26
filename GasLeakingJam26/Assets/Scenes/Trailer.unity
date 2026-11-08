@@ -428,7 +428,7 @@ MonoBehaviour:
   finalLoops: 1
   finalHoldTime: 0.5
   allowSkipFinal: 1
-  nextScene: 
+  nextScene: Nivel1
   fadeToBlackTime: 0.6
 --- !u!114 &1042668100
 MonoBehaviour:
