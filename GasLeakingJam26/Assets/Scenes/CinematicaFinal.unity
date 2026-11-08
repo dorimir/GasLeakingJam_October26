@@ -476,7 +476,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8c18a02f94f6f974fbc6e127f8c32d6d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FondoCamara
-  imagen: {fileID: 2800000, guid: 8bfd9884c762e304692bcb19912bf24d, type: 3}
+  imagen: {fileID: 2800000, guid: 475966f0aad9fab4fa7f59b12d5cb833, type: 3}
   distancia: 20
   tinte: {r: 1, g: 1, b: 1, a: 1}
   materialBase: {fileID: 2100000, guid: f4c854d46008c9e4ab59e20917868324, type: 2}
@@ -490,6 +490,7 @@ GameObject:
   m_Component:
   - component: {fileID: 141191408}
   - component: {fileID: 141191407}
+  - component: {fileID: 141191409}
   m_Layer: 0
   m_Name: Luz Principal
   m_TagString: Untagged
@@ -577,6 +578,35 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &141191409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 141191406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Runtime::UnityEngine.Rendering.Universal.UniversalAdditionalLightData
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_CustomShadowLayers: 0
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
+  m_SoftShadowQuality: 0
+  m_RenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_ShadowRenderingLayersMask:
+    serializedVersion: 0
+    m_Bits: 1
+  m_Version: 4
+  m_LightLayerMask: 1
+  m_ShadowLayerMask: 1
+  m_RenderingLayers: 1
+  m_ShadowRenderingLayers: 1
 --- !u!224 &752061774 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 867973109925284752, guid: 91f49feb6e30a394094668a39a8c9615, type: 3}
